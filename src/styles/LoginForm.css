@@ -1,0 +1,19 @@
+input {
+  padding: 10px 15px;
+  text-align: center;
+	font-size: 20px;
+}
+
+.logintext {
+	display: flex;
+	justify-content: center;
+}
+
+.btn {
+	display: flex;
+	justify-content: center;
+}
+
+form input[type="submit"]{
+	padding: 5px 25px;
+}
