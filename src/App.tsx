@@ -3,7 +3,7 @@ import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 
 function App() {
-	const onSubmit = (data: any): void => {
+	const onSubmit = (data: object): void => {
 		console.log(data);
 	}
 	
