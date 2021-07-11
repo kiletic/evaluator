@@ -1,27 +1,25 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 
 function App() {
-	const [state, changeState] = useState("login");
-
 	const onSubmit = (data: any): void => {
 		console.log(data);
 	}
 	
-	const onchangeState = () => {
-		if (state === "login")
-			changeState("register");
-		else
-			changeState("login");
-	}
-
   return (
-    <div className = "App">
-			{state === "login" 
-			? <LoginForm onSubmit = {onSubmit} onchangeState = {onchangeState} />
-			: <RegisterForm onSubmit = {onSubmit} onchangeState = {onchangeState} />}
-    </div>
+		<Router>
+			<div className = "App">
+				<Switch>
+					<Route path = "/register">
+						<RegisterForm onSubmit = {onSubmit} />
+					</Route>
+					<Route path = "/">
+						<LoginForm onSubmit = {onSubmit} />
+					</Route>
+				</Switch>
+			</div>
+		</Router>
   );
 }
 

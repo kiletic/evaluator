@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/LoginForm.css'
 
-const LoginForm = ({ onSubmit, onchangeState } : { onSubmit: Function, onchangeState: Function }) => {
+const LoginForm = ({ onSubmit } : { onSubmit: Function }) => {
 	const [data, setData] = useState({username: "", password: ""});
 
 	const submitForm = (e: any): void => {
@@ -22,9 +23,9 @@ const LoginForm = ({ onSubmit, onchangeState } : { onSubmit: Function, onchangeS
 			<div className = "btn"> 
 				<input type = "submit"/>
 			</div>
-			<a href = "#" onClick = {onchangeState}>
+			<Link to = "/register">
 				Register	
-			</a>
+			</Link>
 		</form>
 	)	
 }
