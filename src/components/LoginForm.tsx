@@ -1,14 +1,23 @@
+import { useState } from 'react'
 import '../styles/LoginForm.css'
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin } : { onLogin: any }) => {
+	const [data, setData] = useState({username: "", password: ""});
+
+	const submitForm = (e: any) => {
+		e.preventDefault();
+		onLogin(data);
+		setData({username: "", password: ""});
+	}
+
 	return (
-		<form className = "LoginForm">
+		<form className = "LoginForm" onSubmit = {submitForm}>
 			<h2 className = "logintext"> Login </h2>
 			<div className = "row"> 
-				<input type = "text" placeholder = "Username"/>
+				<input type = "username" placeholder = "Username" onChange = {e => { setData({...data, username: e.target.value}); }} value = {data.username} />
 			</div>
 			<div className = "row"> 
-				<input type = "text" placeholder = "Password"/>
+				<input type = "password" placeholder = "Password" onChange = {e => { setData({...data, password: e.target.value}); }} value = {data.password} />
 			</div>
 			<div className = "btn"> 
 				<input type = "submit"/>

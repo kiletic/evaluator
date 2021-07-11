@@ -1,9 +1,13 @@
 import LoginForm from './components/LoginForm'
 
 function App() {
+	const onLogin = (data: any) => {
+		console.log(data);
+	}
+
   return (
     <div className="App">
-			<LoginForm />
+			<LoginForm onLogin = {onLogin} />
     </div>
   );
 }
