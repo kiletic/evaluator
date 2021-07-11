@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import '../styles/LoginForm.css'
 
-const LoginForm = ({ onLogin } : { onLogin: any }) => {
+const LoginForm = ({ onLogin } : { onLogin: Function }) => {
 	const [data, setData] = useState({username: "", password: ""});
 
-	const submitForm = (e: any) => {
+	const submitForm = (e: any): void => {
 		e.preventDefault();
 		onLogin(data);
 		setData({username: "", password: ""});

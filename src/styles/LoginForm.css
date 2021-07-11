@@ -1,17 +1,25 @@
+.LoginForm {
+	border: 2px solid grey;
+	padding: 25px;
+}
+
 input {
   padding: 10px 15px;
   text-align: center;
 	font-size: 20px;
 }
 
+.row {
+	margin-bottom: 10px;
+}
+
 .logintext {
-	display: flex;
-	justify-content: center;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .btn {
-	display: flex;
-	justify-content: center;
+	text-align: center;
 }
 
 form input[type="submit"] {
