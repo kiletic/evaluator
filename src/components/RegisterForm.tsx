@@ -1,16 +1,53 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import '../styles/RegisterForm.css'
 
-const RegisterForm = ({ onSubmit } : { onSubmit: Function }) => {
-	const [data, setData] = useState({username: "", password: "", email: ""});
 
-	const submitForm = (e: any): void => {
+// TODO: rework this
+const RegisterForm = () => {
+	const [data, setData] = useState({username: "", password: "", email: ""});
+	const [registerSuccessful, setregisterSuccessful] = useState(-1);
+
+	const history = useHistory();
+
+	const submitForm = async (e: any) => {
 		e.preventDefault();
-		onSubmit(data);
-		setData({username: "", password: "", email: ""});
+
+		await fetch('http://localhost:5000/users')
+		.then(res => res.json())
+		.then(users => {
+			let userInDB: boolean = false;	
+			for (const user of users) {
+				if (user.username === data.username ||
+						user.password === data.password ||
+						user.email === data.email) {
+					userInDB = true;
+					break;
+				}
+			}
+			if (!userInDB) {  
+				addUser(data);
+				history.push("/");
+			}	else { 
+				setregisterSuccessful(0);
+				setData({username: "", password: "", email: ""});
+			}
+		})
 	}
 
+	const addUser = async (userData: any) => {
+		const res = await fetch('http://localhost:5000/users', { 
+			method: 'POST', 
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(userData)
+		});
+		const content = await res.json()
+
+		console.log(content);
+	}
+	
 	return (
 		<form className = "RegisterForm" onSubmit = {submitForm}>
 			<h2 className = "registertext"> Register </h2>
@@ -29,6 +66,7 @@ const RegisterForm = ({ onSubmit } : { onSubmit: Function }) => {
 			<Link to = "/">
 				Login	
 			</Link>
+			{registerSuccessful === 0 && <p style = {{color: "red"}}>Register was not succesfull.</p>}
 		</form>
 	)	
 }

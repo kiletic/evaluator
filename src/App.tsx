@@ -3,19 +3,18 @@ import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 
 function App() {
-	const onSubmit = (data: object): void => {
-		console.log(data);
-	}
-	
   return (
 		<Router>
 			<div className = "App">
 				<Switch>
+					<Route path = "/home">
+							
+					</Route>
 					<Route path = "/register">
-						<RegisterForm onSubmit = {onSubmit} />
+						<RegisterForm />
 					</Route>
 					<Route path = "/">
-						<LoginForm onSubmit = {onSubmit} />
+						<LoginForm />
 					</Route>
 				</Switch>
 			</div>
