@@ -1,0 +1,29 @@
+.RegisterForm {
+	.box {
+		height: 320px;
+		width: 300px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		text-align: center;
+		border: 2px solid black;
+	}
+
+	.box input {
+		margin-bottom: 10px;
+		text-align: center;
+	}
+
+	.box input[type = "text"], .box input[type = "password"], .box input[type = "email"]  {
+		padding: 10px 40px;
+		border-radius: 10px;
+		outline: none;
+	}
+
+	.box input[type = "submit"] {
+		padding: 5px 20px;
+		margin: 5px 100px;
+	}
+}
+

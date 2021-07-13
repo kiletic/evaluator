@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import '../styles/LoginForm.css'
+import '../scss/LoginForm.scss'
 
 // TODO: rework this
 const LoginForm = () => {
@@ -24,7 +24,7 @@ const LoginForm = () => {
 			}
 			if (userInDB) {
 				console.log("You can login.");
-				history.push("/home");
+				history.push("/problemset");
 			} else {
 				console.log("You cannot login.");
 				setloginSuccessful(0);
@@ -34,22 +34,18 @@ const LoginForm = () => {
 	}
 
 	return (
-		<form className = "LoginForm" onSubmit = {submitForm}>
-			<h2 className = "logintext"> Login </h2>
-			<div className = "row"> 
-				<input type = "username" placeholder = "Username" onChange = {e => { setData({...data, username: e.target.value}); }} value = {data.username} />
-			</div>
-			<div className = "row"> 
+		<div className = "LoginForm">
+			<form className = "box" onSubmit = {submitForm}>
+				<h2> LOGIN </h2>
+				<input type = "text" placeholder = "Username" onChange = {e => { setData({...data, username: e.target.value}); }} value = {data.username} />
 				<input type = "password" placeholder = "Password" onChange = {e => { setData({...data, password: e.target.value}); }} value = {data.password} />
-			</div>
-			<div className = "btn"> 
 				<input type = "submit"/>
-			</div>
-			<Link to = "/register">
-				Register	
-			</Link>
-			{loginSuccessful === 0 && <p style = {{color: "red"}}>Login was not succesfull.</p>}
-		</form>
+				<Link to = "/register" >
+					Register	
+				</Link>
+				{loginSuccessful === 0 && <p style = {{color: "red", paddingTop: "40px"}}>Login was not successful.</p>}
+			</form>
+		</div>
 	)	
 }
 

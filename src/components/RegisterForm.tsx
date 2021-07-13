@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import '../styles/RegisterForm.css'
-
+import '../scss/RegisterForm.scss'
 
 // TODO: rework this
 const RegisterForm = () => {
@@ -49,25 +48,19 @@ const RegisterForm = () => {
 	}
 	
 	return (
-		<form className = "RegisterForm" onSubmit = {submitForm}>
-			<h2 className = "registertext"> Register </h2>
-			<div className = "row"> 
-				<input type = "username" placeholder = "Username" onChange = {e => { setData({...data, username: e.target.value}); }} value = {data.username} />
-			</div>
-			<div className = "row"> 
+		<div className = "RegisterForm">
+			<form className = "box" onSubmit = {submitForm}>
+				<h2>REGISTER</h2>
+				<input type = "text" placeholder = "Username" onChange = {e => { setData({...data, username: e.target.value}); }} value = {data.username} />
 				<input type = "password" placeholder = "Password" onChange = {e => { setData({...data, password: e.target.value}); }} value = {data.password} />
-			</div>
-			<div className = "row"> 
 				<input type = "email" placeholder = "Email" onChange = {e => { setData({...data, email: e.target.value}); }} value = {data.email} />
-			</div>
-			<div className = "btn"> 
 				<input type = "submit"/>
-			</div>
-			<Link to = "/">
-				Login	
-			</Link>
-			{registerSuccessful === 0 && <p style = {{color: "red"}}>Register was not succesfull.</p>}
-		</form>
+				<Link to = "/">
+					Login	
+				</Link>
+				{registerSuccessful === 0 && <p style = {{color: "red", paddingTop: "10px"}}>Register was not successful.</p>}
+			</form>
+		</div>
 	)	
 }
 
