@@ -1,0 +1,41 @@
+.Header {
+	
+	.container {
+		height: 75px;
+		background-color: #1d1836 ;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: white;
+	}
+
+	img {
+		width: 60px;
+		margin-left: 20px;
+		margin-right: 10px;
+	}
+
+	.logo {
+		display: flex;
+	}
+
+	li {
+		display: inline-block;
+		padding: 0px 15px;
+		margin-bottom: 10px;
+	}
+
+	nav {
+		margin-right: 50px;
+	}
+
+	.active {
+		color: #ab2bab;
+		font-weight: bold;
+	}
+
+	a {
+		color: inherit;
+	}
+
+}
