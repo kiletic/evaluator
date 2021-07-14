@@ -18,8 +18,8 @@ const Problemset = () => {
 		<div className = "Problemset">
 			<div className = "container">
 				{tasks && tasks.map(task => (
-					<Link to = {`/problemset/tasks/${task.id}`} >
-						<div className = "row" key = {task.id}>
+					<Link to = {`/problemset/tasks/${task.id}`} key = {task.id}>
+						<div className = "row">
 							<div className = "task-name">
 								<TaskRow content = {task.name} />
 							</div>

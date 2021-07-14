@@ -1,6 +1,42 @@
 .Task {
+	color: white;
+
 	.container {
 		display: flex;
+		margin-left: 200px;
+	}
 
+	.content {
+		width: 900px;
+		border: 2px solid grey;
+		padding: 10px;
+	}
+
+	.history {
+		display: flex;
+		justify-content: center;
+		margin-left: 100px;
+		margin-top: 150px;
+		width: 300px;
+		height: 500px;
+		border: 2px solid grey;
+	}
+
+	ol {
+		padding: 0;
+	}
+
+	li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+
+	li:hover {
+		color: red;
+	}
+
+	.btn {
+		margin: 0 5px;
+		padding: 5px;
 	}
 }
