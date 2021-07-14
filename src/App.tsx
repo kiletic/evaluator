@@ -3,11 +3,15 @@ import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 import Problemset from './components/Problemset'
 import Header from './components/Header'
+import Task from './components/Task'
 
 function App() {
-	console.log(window.location.pathname);
   return (
 		<Router>
+			<Route render = {({ location }) => 
+				location.pathname !== "/" && location.pathname !== "/register"
+				? <Header />
+				: null } />
 			<Switch>
 				<Route path = "/register">
 					<RegisterForm />
@@ -15,12 +19,12 @@ function App() {
 				<Route exact path = "/">
 					<LoginForm />
 				</Route>
-				<div>
-					<Header />
-					<Route path = "/problemset">
-						<Problemset />	
-					</Route>
-				</div>
+				<Route path = "/problemset/tasks/:id">
+					<Task />
+				</Route>
+				<Route exact path = "/problemset">
+					<Problemset />	
+				</Route>
 			</Switch>
 		</Router>
   );
