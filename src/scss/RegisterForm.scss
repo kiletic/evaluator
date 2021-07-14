@@ -1,5 +1,7 @@
 .RegisterForm {
 	.box {
+		background-color: #04041f;
+		color: silver;
 		height: 320px;
 		width: 300px;
 		position: absolute;
@@ -7,12 +9,15 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		text-align: center;
-		border: 2px solid black;
+		border: 5px solid #101038;
+		border-radius: 15px;
 	}
 
 	.box input {
 		margin-bottom: 10px;
 		text-align: center;
+		background-color: inherit;
+		color: white;
 	}
 
 	.box input[type = "text"], .box input[type = "password"], .box input[type = "email"]  {

@@ -5,10 +5,10 @@ const Header = () => {
 	return (
 		<div className = "Header">
 			<div className = "container">
-				<div className = "logo">
-					<img src = "https://i.ibb.co/JckqxQ1/tools.png"/>
-					<p><strong>Evaluator</strong></p>
-				</div>
+				<span>
+					<div><img src = "https://i.ibb.co/JckqxQ1/tools.png"/></div>
+					<p>Evaluator</p>
+				</span>
 				<nav>
 					<ul>
 						<NavLink activeClassName = "active" to = "/problemset"><li>Problemset</li></NavLink>

@@ -1,5 +1,4 @@
 .Header {
-	
 	.container {
 		height: 75px;
 		background-color: #1d1836 ;
@@ -13,16 +12,12 @@
 		width: 60px;
 		margin-left: 20px;
 		margin-right: 10px;
-	}
-
-	.logo {
-		display: flex;
+		margin-top: 15px;
 	}
 
 	li {
 		display: inline-block;
 		padding: 0px 15px;
-		margin-bottom: 10px;
 	}
 
 	nav {
@@ -32,10 +27,16 @@
 	.active {
 		color: #ab2bab;
 		font-weight: bold;
+		text-shadow: 2px 2px 10px black;
 	}
 
 	a {
 		color: inherit;
 	}
 
+	span {
+		display: flex;
+		font-size: 30px;
+		font-weight: bold;
+	}
 }
