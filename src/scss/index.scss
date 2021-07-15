@@ -8,3 +8,11 @@ html, body {
 	height: 100%;
 	background-color: #290429;
 }
+
+ .ace_editor * { 
+	 font-family : monospace !important;
+	 font-size: 16px !important;
+	 direction: ltr !important;
+	 text-align: left !important;
+ }
+

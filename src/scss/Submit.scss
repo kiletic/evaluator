@@ -1,0 +1,62 @@
+.Submit {
+	color: white;
+
+	.container {
+		padding: 10px;
+		margin-left: 200px;
+	}
+
+	.active {
+		color: #ab2bab;
+		font-weight: bold;
+		text-shadow: 2px 2px 10px black;
+	}
+	
+	ol {
+		padding: 0;
+	}
+
+	li {
+		display: inline-block;
+		margin: 0 20px;
+	}
+	
+	li:hover {
+		color: red;
+	}
+
+	a {
+		color: inherit;
+	}
+
+	.lang-picker {
+		padding: 5px;
+		font-size: 15px;
+		margin-bottom: 10px;
+		margin-left: 10px;
+	}
+
+	.editors {
+		display: flex;
+	}
+	
+	.inout-box {
+		margin-left: 20px;
+	}
+
+	textarea {
+		font-size: 16px;
+		background-color: inherit;
+		color: white;
+	}
+
+	button {
+		padding: 5px;
+		font-size: 15px;
+	}
+
+	.submit-btn {
+		margin-top: 20px;
+		margin-left: 230px;
+	}
+}

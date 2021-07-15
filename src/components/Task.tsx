@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, NavLink } from 'react-router-dom'
+
 import '../scss/Task.scss'
 
 const Task = () => {
 	const { id } = useParams() as any;
-	const [task, setTask] = useState(null);
+	const [task, setTask]: any = useState({});
+
+	const taskPath = "/problemset/tasks/" + id;
+	const submitPath = "/problemset/submit/" + id;
+	const statsPath = "/problemset/stats/" + id;
 
 	useEffect(() => {
 		fetch(`http://localhost:5000/tasks/${id}`)
@@ -14,19 +19,19 @@ const Task = () => {
 			});
 	}, [id]);
 
-	return (
+	return Object.keys(task).length !== 0 ? (
 		<div className = "Task">
 			<div className = "container">
 				<div className = "content">
 					<div className = "bar">
 						<ol>
-							<li>Submit</li>
-							<li>Placeholder</li>
-							<li>Placeholder</li>
+							<NavLink activeClassName = "active" exact to = {taskPath}><li>Task</li></NavLink>
+							<NavLink activeClassName = "active" exact to = {submitPath}><li>Submit</li></NavLink>
+							<NavLink activeClassName = "active" exact to = {statsPath}><li>Stats</li></NavLink>
 						</ol>
 					</div>
-					<h1> {task && task.name} </h1>
-					{task && task.content}
+					<h1> {task.name} </h1>
+					{task.content}
 					<div className = "Input">
 						<h3> Input </h3>
 						This is where input goes.
@@ -41,7 +46,7 @@ const Task = () => {
 				</div>
 			</div>
 		</div>
-	);
+	) : null;
 }
 
 export default Task;

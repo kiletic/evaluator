@@ -4,7 +4,7 @@ import '../scss/Problemset.scss'
 import TaskRow from './TaskRow' 
 
 const Problemset = () => {
-	const [tasks, setTasks] = useState(null);
+	const [tasks, setTasks] = useState([]);
 
 	useEffect(() => {
 		fetch('http://localhost:5000/tasks')
@@ -14,10 +14,10 @@ const Problemset = () => {
 			});
 	}, []);
 
-	return (
+	return tasks !== [] ? (
 		<div className = "Problemset">
 			<div className = "container">
-				{tasks && tasks.map(task => (
+				{tasks.map((task: any) => (
 					<Link to = {`/problemset/tasks/${task.id}`} key = {task.id}>
 						<div className = "row">
 							<div className = "task-name">
@@ -31,7 +31,7 @@ const Problemset = () => {
 				))}
 			</div>
 		</div>
-	)
+	) : null;
 }
 
 export default Problemset;

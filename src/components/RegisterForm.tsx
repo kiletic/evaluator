@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, BrowserRouter as Route } from 'react-router-dom'
 import '../scss/RegisterForm.scss'
 
 // TODO: rework this
