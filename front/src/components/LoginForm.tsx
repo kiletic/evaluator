@@ -1,4 +1,3 @@
-import { userInfo } from 'os';
 import { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import '../scss/LoginForm.scss'
@@ -6,32 +5,28 @@ import '../scss/LoginForm.scss'
 // TODO: rework this
 const LoginForm = () => {
 	const [data, setData] = useState({username: "", password: ""});
-	const [loginSuccessful, setloginSuccessful] = useState(-1);
+	const [loginStatus, setLoginStatus] = useState("");
 
 	const history = useHistory();
 
-	const submitForm = async (e: any) => {
+	const submitForm = (e: any) => {
 		e.preventDefault();
 
-		await fetch('http://localhost:5000/users')
-		.then(res => res.json())
-		.then(users => {
-			let userInDB : boolean = false;
-			for (const user of users) { 
-				if (user.username === data.username && user.password === data.password) {
-					userInDB = true;
-					break;
-				}
-			}
-			if (userInDB) {
-				console.log("You can login.");
-				history.push("/problemset");
+		fetch('http://localhost:4000/api/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		}).then(async res => {
+			if (res.status === 200) {
+				history.push('/problemset');
 			} else {
-				console.log("You cannot login.");
-				setloginSuccessful(0);
-				setData({username: "", password: ""});
+				const messageJson = await res.json();
+				setLoginStatus(messageJson.message);
 			}
-		})	
+		});
+
 	}
 
 	return (
@@ -44,7 +39,7 @@ const LoginForm = () => {
 				<Link to = "/register" >
 					Register	
 				</Link>
-				{loginSuccessful === 0 && <p style = {{color: "red", paddingTop: "40px"}}>Login was not successful.</p>}
+				{loginStatus !== "" && <p style = {{color: "red", paddingTop: "40px"}}>{loginStatus}</p>}
 			</form>
 		</div>
 	)	

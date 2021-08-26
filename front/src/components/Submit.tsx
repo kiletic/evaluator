@@ -31,7 +31,7 @@ const Submit = () => {
 				</div>
 				<h1> Submit </h1>
 				Select your language: 
-				<select className = "lang-picker" onChange = {() => setMode(document.getElementById("lang-picker").value)}id = "lang-picker">
+				<select className = "lang-picker" onChange = {(e) => setMode(e.target.value)} id = "lang-picker">
 					<option value = "c_cpp"> C/C++ </option>
 					<option value = "haskell"> Haskell </option>
 					<option value = "python"> Python </option>
@@ -40,11 +40,11 @@ const Submit = () => {
 					<AceEditor mode = {mode} theme = "cobalt" width = "600px"/>
 					<div className = "inout-box">
 						<p> Input: </p>
-						<textarea rows = "8" cols = "25">
+						<textarea rows = {8} cols = {25}>
 						</textarea>
 						<p> <button> Run code </button> </p>
 						<p> Output: </p>
-						<textarea readOnly rows = "8" cols = "25">
+						<textarea readOnly rows = {8} cols = {25}>
 						</textarea>
 					</div>
 				</div>
