@@ -2,14 +2,17 @@ import express from 'express';
 import path from 'path';
 import session from 'express-session';
 import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo';
 
 // config
-import { dbURI, dbOPTS } from './config/db';
+import { dbURI } from './config/db';
 
 // routes
 import route_auth from './routes/auth';
 
 const app = express();
+
+mongoose.connect(dbURI).then(() => { app.listen(4000, () => console.log('Listening on http://localhost:4000...')) });
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../../front/build")));
@@ -17,11 +20,10 @@ app.use(session({
 	secret: 'moj sekret',
 	resave: false,
 	saveUninitialized: true, 
-	cookie: { maxAge: 1000 * 60 * 60 * 24 * 2 }
+	store: MongoStore.create({
+		mongoUrl: dbURI
+	})
 }));
-
-
-mongoose.connect(dbURI, dbOPTS);
 
 app.use('/', route_auth);
 
@@ -32,6 +34,3 @@ app.get('/*', function(req, res) {
     }
   })
 })
-
-app.listen(4000, () => console.log('Listening on port 4000...'));
-

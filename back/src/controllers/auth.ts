@@ -42,4 +42,16 @@ const onLogin = async (req: any, res: any) => {
 	res.status(403).json({ message: "Invalid username." });
 }
 
-export { onLogin, onRegister };
+const onLogout = async (req: any, res: any) => {
+	req.session.destroy();
+}
+
+const checkAuth = async (req: any, res: any) => {
+	if (req.session.isAuth) {
+		res.status(200).json({ isAuth: true });
+	} else {
+		res.status(200).json({ isAuth: false });
+	}
+}
+
+export { onLogin, onRegister, onLogout, checkAuth };

@@ -7,6 +7,15 @@ import AuthContext from './AuthContext';
 const Header = () => {
 	const { setAuth } = useContext(AuthContext);
 
+	const onClick = () => {
+		setAuth(false);
+
+		fetch('http://localhost:4000/api/logout', {
+			method: 'GET',
+		}).then(res => res.json())
+			.then((data: any) => console.log(data));
+	};
+
 	return (
 		<div className = "Header">
 			<div className = "container">
@@ -18,7 +27,7 @@ const Header = () => {
 					<ul>
 						<NavLink activeClassName = "active" to = "/problemset"><li>Problemset</li></NavLink>
 						<NavLink activeClassName = "active" to = "/profile"><li>Profile</li></NavLink>
-						<NavLink activeClassName = "active" exact to = "/login" onClick = {() => setAuth(false) }><li>Logout</li></NavLink>
+						<NavLink activeClassName = "active" exact to = "/login" onClick = {() => onClick() }><li>Logout</li></NavLink>
 					</ul>
 				</nav>
 			</div>
