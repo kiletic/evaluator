@@ -12,10 +12,10 @@ const Task = () => {
 	const statsPath = "/problemset/stats/" + id;
 
 	useEffect(() => {
-		fetch(`http://localhost:5000/tasks/${id}`)
+		fetch(`http://localhost:4000/api/tasks/${id}`)
 			.then(res => res.json())
 			.then(data => {
-				setTask(data);
+				setTask(data[0]);
 			});
 	}, [id]);
 
@@ -31,7 +31,7 @@ const Task = () => {
 						</ol>
 					</div>
 					<h1> {task.name} </h1>
-					{task.content}
+					{task.text}
 					<div className = "Input">
 						<h3> Input </h3>
 						This is where input goes.

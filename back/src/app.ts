@@ -3,12 +3,14 @@ import path from 'path';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // config
 import { dbURI } from './config/db';
 
 // routes
 import route_auth from './routes/auth';
+import route_tasks from './routes/tasks';
 
 const app = express();
 
@@ -26,6 +28,7 @@ app.use(session({
 }));
 
 app.use('/', route_auth);
+app.use('/', route_tasks);
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, "../../front/build/index.html"), function(err) {
@@ -34,3 +37,5 @@ app.get('/*', function(req, res) {
     }
   })
 })
+
+export { AutoIncrement };

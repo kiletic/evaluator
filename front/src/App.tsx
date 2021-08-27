@@ -15,14 +15,12 @@ function App() {
 	const [checkForAuth, setCheckForAuth] = useState(false);
 
 	useEffect(() => {
-		console.log('Calling get req to /api/check-auth');
 		fetch('http://localhost:4000/api/check-auth', { 
 			method: "GET",
 		}).then(res => res.json())
 			.then(data => {
 				setAuth(data.isAuth);
 				setCheckForAuth(true);
-				console.log('Auth is set to ', data.isAuth);
 			});
 	}, []);
 

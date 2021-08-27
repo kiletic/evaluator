@@ -7,7 +7,7 @@ const Problemset = () => {
 	const [tasks, setTasks] = useState([]);
 
 	useEffect(() => {
-		fetch('http://localhost:5000/tasks')
+		fetch('http://localhost:4000/api/tasks')
 			.then(res => res.json())
 			.then(taskList => {
 				setTasks(taskList);
@@ -18,7 +18,7 @@ const Problemset = () => {
 		<div className = "Problemset">
 			<div className = "container">
 				{tasks.map((task: any) => (
-					<Link to = {`/problemset/tasks/${task.id}`} key = {task.id}>
+					<Link to = {`/problemset/tasks/${task._id}`} key = {task._id}>
 						<div className = "row">
 							<div className = "task-name">
 								<TaskRow content = {task.name} />
