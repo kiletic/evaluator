@@ -7,7 +7,7 @@ const GetTasks = async () => {
 };
 
 const GetTask = async (id: number) => {
-	const task = await Task.find({ _id: id });
+	const task = await Task.findOne({ _id: id });
 
 	return task;
 };
