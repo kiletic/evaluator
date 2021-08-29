@@ -22,17 +22,19 @@
 		border: 2px solid grey;
 	}
 
-	ol {
-		padding: 0;
-	}
+	.bar {
+		ol {
+			padding: 0;
+		}
 
-	li {
-		display: inline-block;
-		margin: 0 20px;
-	}
+		li {
+			display: inline-block;
+			margin: 0 20px;
+		}
 
-	li:hover {
-		color: red;
+		li:hover {
+			color: red;
+		}
 	}
 
 	.active {
@@ -51,6 +53,7 @@
 		padding-left: 14px;
 		padding-bottom: 10px;
 		border-radius: 6px;
+		margin-bottom: 30px;
 
 		.in {
 			width: 880px;
