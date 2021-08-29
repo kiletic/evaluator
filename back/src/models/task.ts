@@ -6,9 +6,14 @@ const Schema = mongoose.Schema;
 const taskSchema = new Schema({
 	_id: Number,
 	name: String,
-	text : String,
+	text: String,
 	inputText: String,
-	outputText: String
+	outputText: String,
+	testcases: [{
+		input: String,
+		output: String,
+		note: String
+	}]
 }, { _id: false });
 
 taskSchema.plugin(AutoIncrement);

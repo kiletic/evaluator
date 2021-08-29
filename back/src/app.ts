@@ -3,6 +3,7 @@ import path from 'path';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
+import Cors from 'cors';
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // config
@@ -16,6 +17,7 @@ const app = express();
 
 mongoose.connect(dbURI).then(() => { app.listen(4000, () => console.log('Listening on http://localhost:4000...')) });
 
+app.use(Cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../../front/build")));
 app.use(session({

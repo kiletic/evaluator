@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "@types/mathjax": "0.0.37",
-    "@types/react-mathjax": "^1.0.1",
     "@types/react-router-dom": "^5.1.8"
   }
 }

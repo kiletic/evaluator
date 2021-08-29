@@ -9,6 +9,7 @@
 	.content {
 		width: 900px;
 		padding: 10px;
+		//word-wrap: break-word;
 	}
 
 	.history {
@@ -42,5 +43,56 @@
 
 	a {
 		color: inherit;
+	}
+
+	.testcase {
+		border: 1px solid grey;
+		width: 914px;
+		padding-left: 14px;
+		padding-bottom: 10px;
+		border-radius: 6px;
+
+		.in {
+			width: 880px;
+			margin-right: 100px;
+			max-height: 400px;
+		}
+		.out {
+			width: 880px;
+			max-height: 400px;
+		}
+		h4 {
+			margin-bottom: 8px;
+			margin-top: 8px;
+		}
+		pre {
+			margin: 0;
+			overflow: auto;
+			white-space: nowrap;
+			border: 1px solid grey;
+			border-radius: 5px;
+			padding: 8px;
+			padding-top: 15px;
+			background-color: #300730;
+			max-height: 300px;
+		}
+		.tc-header {
+			display: flex;
+			.cp-btn {
+				margin-top: 5px;
+				margin-bottom: 5px;
+				margin-left: 20px;
+				padding-top: 0;
+				padding-bottom: 0;
+				background-color: #541854;
+				color: white;
+				border: 1px solid grey;
+				font-weight: bold;
+			}
+			.cp-btn:hover {
+				background-color: #542954;
+				cursor: pointer;
+			}
+		}
 	}
 }
