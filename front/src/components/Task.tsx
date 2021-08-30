@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import Parser from 'html-react-parser';
+import DOMPurify from 'dompurify';
 
 import '../scss/Task.scss'
-import { Element } from 'domhandler/lib/node';
 
 const Task = () => {
 	const { id } = useParams() as any;
@@ -13,24 +13,14 @@ const Task = () => {
 	const submitPath = "/problemset/submit/" + id;
 	const statsPath = "/problemset/stats/" + id;
 
-	const parseOptions = {
-		replace: (domNode: any) => {
-			const allowedTags = ["br", "ul", "li"];
-			if (domNode instanceof Element && !allowedTags.includes(domNode.name)) {
-				return <div/>
-			}
-		}
-	}
-
 	useEffect(() => {
 		fetch(`http://localhost:4000/api/tasks/${id}`)
 			.then(res => res.json())
 			.then(data => {
+				// TODO: fix strings that contain invalid html tags
 				data.text = data.text.replace(/\n/g, " <br/> ");
-				console.log(data.inputText);
-				console.log(data.inputText.replace(/\n/g, " <br/> "));
 				data.inputText = data.inputText.replace(/\n/g, " <br/> ");
-				//data.outputText = data.outputText.replace(/\n/g, "<br/>");
+				data.outputText = data.outputText.replace(/\n/g, "<br/>");
 				if (data.testcases) {
 					for (var i = 0; i < data.testcases.length; i++) {
 						data.testcases[i].preInput = data.testcases[i].input.replace(/\n/g, " <br/> ");	
@@ -66,14 +56,14 @@ const Task = () => {
 						</ol>
 					</div>
 						<h1> {task.name} </h1>
-						{Parser(task.text, parseOptions)}
+						{Parser(DOMPurify.sanitize(task.text))}
 						<div className = "Input">
 							<h3> Input </h3>
-							{Parser(task.inputText, parseOptions)}
+							{Parser(DOMPurify.sanitize(task.inputText))}
 						</div>
 						<div className = "Output">
 							<h3> Output </h3>
-							{Parser(task.outputText, parseOptions)}
+							{Parser(DOMPurify.sanitize(task.outputText))}
 						</div>
 						<div className = "Samples">
 							<h3> Sample tests </h3>
@@ -84,19 +74,19 @@ const Task = () => {
 											<h4> {"Input #" + (index + 1)} </h4> 
 											<button className = "cp-btn" onClick = {() => copyToClipboard(testcase.input)} data-clipboard-text = "1"> Copy </button>
 										</div>
-										<pre>{Parser(testcase.preInput, parseOptions)}</pre> 
+										<pre>{Parser(DOMPurify.sanitize(testcase.preInput))}</pre> 
 									</div>
 									<div className = "out">
 										<div className = "tc-header">
 											<h4> {"Output #" + (index + 1)} </h4>
 											<button className = "cp-btn" onClick = {() => copyToClipboard(testcase.output)}> Copy </button>
 										</div>
-										<pre>{Parser(testcase.preOutput, parseOptions)}</pre>
+										<pre>{Parser(DOMPurify.sanitize(testcase.preOutput))}</pre>
 									</div>
 									{testcase.note && 
 									<div className = "note">
 										<h4> {"Note #" + (index + 1)} </h4>
-										{Parser(testcase.note, parseOptions)}
+										{Parser(DOMPurify.sanitize(testcase.note))}
 									</div>}
 								</div>
 							))}

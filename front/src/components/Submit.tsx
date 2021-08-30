@@ -18,6 +18,12 @@ const Submit = () => {
 	const taskPath = "/problemset/tasks/" + id;
 	const submitPath = "/problemset/submit/" + id;
 	const statsPath = "/problemset/stats/" + id;
+
+	const submitCode = () => {
+		fetch('http://localhost:4000/api/submit', { method: "POST" })
+			.then(res => res.json())
+			.then(data => data);
+	};
 	
 	return (
 		<div className = "Submit">
@@ -48,7 +54,7 @@ const Submit = () => {
 						</textarea>
 					</div>
 				</div>
-			  <button className = "submit-btn"> Submit code </button>
+			  <button className = "submit-btn" onClick = {() => submitCode()}> Submit code </button>
 			</div>
 		</div>
 	)

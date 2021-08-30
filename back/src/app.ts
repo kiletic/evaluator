@@ -12,6 +12,7 @@ import { dbURI } from './config/db';
 // routes
 import route_auth from './routes/auth';
 import route_tasks from './routes/tasks';
+import route_submit from './routes/submit';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(session({
 
 app.use('/', route_auth);
 app.use('/', route_tasks);
+app.use('/', route_submit);
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, "../../front/build/index.html"), function(err) {
