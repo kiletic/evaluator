@@ -1,0 +1,49 @@
+.Submission {
+	color: white;
+	margin-left: 250px;
+	margin-top: 50px;
+
+	.header {
+		.row {
+			display: flex;
+
+			.cell {
+				width: 200px;
+				text-align: center;
+				border: 1px solid grey;
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+
+			.lower {
+				padding-top: 20px;	
+				padding-bottom: 0;
+			}
+			
+			h3 {
+				margin: 0;
+			}
+		}		
+	}
+
+	.code-header {
+		display: flex;
+
+		.cp-btn {
+			margin-top: 23px;
+			margin-left: 20px;
+			padding-top: 0;
+			padding-bottom: 0;
+			background-color: #541854;
+			color: white;
+			border: 1px solid grey;
+			font-weight: bold;
+			height: 40px;
+			width: 60px;
+		}
+		.cp-btn:hover {
+			background-color: #542954;
+			cursor: pointer;
+		}
+	}
+}

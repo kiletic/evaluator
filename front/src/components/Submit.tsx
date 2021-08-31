@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, NavLink } from 'react-router-dom'
+import { useParams, NavLink, useHistory } from 'react-router-dom'
 import AceEditor from 'react-ace'
 
 import "ace-builds/src-noconflict/mode-c_cpp"
@@ -12,6 +12,7 @@ import '../scss/Submit.scss'
 
 const Submit = () => {
 	const { id } = useParams() as any;
+	const history = useHistory();
 
 	const [language, setLanguage] = useState("c_cpp");
 	const [code, setCode] = useState("");
@@ -28,7 +29,10 @@ const Submit = () => {
 			},	
 			body: JSON.stringify({ 'code' : code, 'language' : language })		
 		}).then(res => res.json())
-			.then(data => data);
+			.then(data => {
+				console.log(data);
+				history.push(`/submission/${data.submissionId}`);
+			});
 	};
 	
 	return (

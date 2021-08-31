@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import Parser from 'html-react-parser';
 import DOMPurify from 'dompurify';
+import { copyToClipboard } from '../utils';
 
 import '../scss/Task.scss'
 
@@ -35,15 +36,6 @@ const Task = () => {
 		MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 	}, [task]);
 
-	const copyToClipboard = (text: string) => {
-		const dummy = document.createElement('textarea');
-		dummy.textContent = text;
-		document.body.append(dummy);
-		dummy.select();
-		document.execCommand("copy");
-		document.body.removeChild(dummy);
-	}
-	
 	return Object.keys(task).length !== 0 ? (
 		<div className = "Task">
 			<div className = "container">

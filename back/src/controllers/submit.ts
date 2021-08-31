@@ -22,9 +22,7 @@ const CreateSubmission = async (req: any) => {
 	return submission;
 }
 
-const Submit = async (req: any) => {
-	const submission = await CreateSubmission(req);
-
+const RunSubmission = async (submission: any) => {
 	try {
 		execSync('c++ hello_world.cpp -o hello_world', { stdio: 'pipe', cwd: './src/lib' });
 	} catch(error) {
@@ -53,10 +51,17 @@ const Submit = async (req: any) => {
 	console.log("Accepted!!!");
 };
 
+const Submit = async (req: any) => {
+	const submission: any = await CreateSubmission(req);
+	RunSubmission(submission);
+
+	return submission.submissionId;
+};
+
 const GetSubmission = async (id: number) => {
 	const submission = await Submission.findOne({ submissionId : id }); 
 
 	return submission;
 };
 
-export { Submit, CreateSubmission, GetSubmission }; 
+export { Submit, CreateSubmission, GetSubmission, RunSubmission }; 
