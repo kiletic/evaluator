@@ -13,15 +13,21 @@ import '../scss/Submit.scss'
 const Submit = () => {
 	const { id } = useParams() as any;
 
-	const [mode, setMode] = useState("c_cpp");
+	const [language, setLanguage] = useState("c_cpp");
+	const [code, setCode] = useState("");
 
 	const taskPath = "/problemset/tasks/" + id;
 	const submitPath = "/problemset/submit/" + id;
 	const statsPath = "/problemset/stats/" + id;
 
 	const submitCode = () => {
-		fetch('http://localhost:4000/api/submit', { method: "POST" })
-			.then(res => res.json())
+		fetch(`http://localhost:4000/api/submit/${id}`, { 
+			method: "POST",
+			headers: {
+				'Content-type': 'application/json'	
+			},	
+			body: JSON.stringify({ 'code' : code, 'language' : language })		
+		}).then(res => res.json())
 			.then(data => data);
 	};
 	
@@ -37,13 +43,13 @@ const Submit = () => {
 				</div>
 				<h1> Submit </h1>
 				Select your language: 
-				<select className = "lang-picker" onChange = {(e) => setMode(e.target.value)} id = "lang-picker">
+				<select className = "lang-picker" onChange = {(e) => setLanguage(e.target.value)} id = "lang-picker">
 					<option value = "c_cpp"> C/C++ </option>
 					<option value = "haskell"> Haskell </option>
 					<option value = "python"> Python </option>
 				</select>
 				<div className = "editors">
-					<AceEditor mode = {mode} theme = "cobalt" width = "600px"/>
+					<AceEditor mode = {language} theme = "cobalt" width = "600px" onChange = {(newCode) => setCode(newCode)}/>
 					<div className = "inout-box">
 						<p> Input: </p>
 						<textarea rows = {8} cols = {25}>

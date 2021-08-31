@@ -1,6 +1,30 @@
-import { execSync, exec } from 'child_process';
+import { execSync } from 'child_process';
+import Submission from '../models/submission';
+import Task from '../models/task';
 
-const Submit = async () => {
+const CreateSubmission = async (req: any) => {
+	const task: any = await Task.findOne({ _id: req.params.id });
+
+	const submission = new Submission({
+		userName: req.session.username,
+		code: {
+			content: req.body.code,
+			language: req.body.language 
+		},
+		task: {
+			id: req.params.id,
+			name: task.name 
+		},
+		testcaseResults: []		
+	});		
+	await submission.save();
+
+	return submission;
+}
+
+const Submit = async (req: any) => {
+	const submission = await CreateSubmission(req);
+
 	try {
 		execSync('c++ hello_world.cpp -o hello_world', { stdio: 'pipe', cwd: './src/lib' });
 	} catch(error) {
@@ -29,4 +53,10 @@ const Submit = async () => {
 	console.log("Accepted!!!");
 };
 
-export { Submit }; 
+const GetSubmission = async (id: number) => {
+	const submission = await Submission.findOne({ submissionId : id }); 
+
+	return submission;
+};
+
+export { Submit, CreateSubmission, GetSubmission }; 
