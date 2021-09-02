@@ -13,6 +13,10 @@ const taskSchema = new Schema({
 		input: String,
 		output: String,
 		note: String
+	}],
+	hiddenTestcases: [{
+		inputPath: String,
+		outputPath: String
 	}]
 }, { _id: false });
 
