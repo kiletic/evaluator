@@ -9,6 +9,7 @@ class Worker {
 	taskInfo: any;
 	time: number;
 	memory: number;
+	runCmd: string;
 
 	constructor() {
 		this.submission = null;
@@ -16,6 +17,7 @@ class Worker {
 		this.taskInfo = {};
 		this.time = 0;
 		this.memory = 0;
+		this.runCmd = "";
 	}
 
 	jobless() {
@@ -30,12 +32,13 @@ class Worker {
 		// dont forget to change '1' to task ID!!!
 		this.taskInfo.path = path.join(__dirname, '..', '..', 'local', 'tasks', '1');
 		this.taskInfo.inputs = fs.readdirSync(path.join(this.taskInfo.path, 'input'));
+		this.runCmd = task.run;
 
 		this.run_testcase(0);
 	} 
 
 	async finish_work() {
-		await this.submission.save();
+		this.submission.save();
 
 		this.submission = null;
 		this.time = 0;
@@ -55,10 +58,11 @@ class Worker {
 		console.log(`Running on testcase ${tcNum + 1}...`);
 
 		const INPUT_PATH: string = path.join(this.taskInfo.path, 'input', this.taskInfo.inputs[tcNum]);
-		const RUN_CMD: string = './solution';
 		const cwd: string = this.submissionPath;
 
-		const child = exec(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${RUN_CMD} ${INPUT_PATH}`,			{ cwd: './src/controllers/' },
+//		console.log(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`);
+
+		const child = exec(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`,			{ cwd: './src/controllers/' },
 		(error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling python testcase checker.");

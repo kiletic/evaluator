@@ -7,10 +7,11 @@ def limit_resources(timelimit, memorylimit):
     resource.setrlimit(resource.RLIMIT_CPU, (timelimit, timelimit))
     resource.setrlimit(resource.RLIMIT_AS, (memorylimit, memorylimit))
 
-_, cwd, timelimit, memorylimit, run_cmd, input_path = sys.argv
+cwd, timelimit, memorylimit, input_path = sys.argv[1:5]
+run_cmd = " ".join(sys.argv[5:len(sys.argv)])
 IN = open(input_path, 'r').read()
 
-p = subprocess.Popen('./solution', shell=True, preexec_fn=limit_resources(int(timelimit), int(memorylimit)),
+p = subprocess.Popen(run_cmd, shell=True, preexec_fn=limit_resources(int(timelimit), int(memorylimit)),
                      stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf-8', cwd=cwd)
 
 (out, err) = p.communicate(input=IN)
