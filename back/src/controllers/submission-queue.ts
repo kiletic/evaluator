@@ -34,10 +34,11 @@ class Worker {
 		this.taskInfo.inputs = fs.readdirSync(path.join(this.taskInfo.path, 'input'));
 		this.runCmd = task.run;
 
+		console.log("Starting to evaluate new submission!");
 		this.run_testcase(0);
 	} 
 
-	async finish_work() {
+	finish_work() {
 		this.submission.save();
 
 		this.submission = null;
@@ -60,10 +61,8 @@ class Worker {
 		const INPUT_PATH: string = path.join(this.taskInfo.path, 'input', this.taskInfo.inputs[tcNum]);
 		const cwd: string = this.submissionPath;
 
-//		console.log(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`);
-
-		const child = exec(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`,			{ cwd: './src/controllers/' },
-		(error, stdout, stderr) => {
+		exec(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`,
+		{ cwd: './src/controllers/' }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling python testcase checker.");
 				return;
@@ -111,7 +110,7 @@ class Worker {
 
 		const cmd = './checker' + ' ' + inputFilePath + ' ' + userOutputFilePath + ' ' + correctOutputFilePath; 
 
-		const child = exec(cmd, { cwd: './src/lib/' }, (error, stdout, stderr) => {
+		exec(cmd, { cwd: './src/lib/' }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling checker.");
 				console.log(stderr);
@@ -159,9 +158,9 @@ class SubmissionQueue {
 			return;
 		}
 
-		const task = this.submissions.dequeue();
 		for (var i = 0; i < this.numWorkers; i++) {
 			if (this.workers[i].jobless()) {
+				const task = this.submissions.dequeue();
 				this.workers[i].assign(task);
 				break;
 			}

@@ -28,7 +28,7 @@ const Submission = () => {
 					if (data.message) {
 						console.log(data.message);	
 					} else {
-						if (data.result === 'Pending') {
+						if (data.result === 'Pending' || data.result.includes('Running on test')) {
 							setSubmission({ ...data, result: data.result });
 							setTimeout(GetSubmission, 2000);
 						} else {

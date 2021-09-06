@@ -21,7 +21,7 @@ const Submit = () => {
 	const submitPath = "/problemset/submit/" + id;
 	const statsPath = "/problemset/stats/" + id;
 
-	const submitCode = () => {
+	const submitCode = async () => {
 		fetch(`http://localhost:4000/api/submit/${id}`, { 
 			method: "POST",
 			headers: {

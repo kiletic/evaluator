@@ -23,7 +23,7 @@ const submissionSchema = new Schema({
 	},
 	memoryTaken: {
 		type: Number,
-		default: 0 // in MB 
+		default: 0 // in KB 
 	},
 	testcaseResults: [{
 		verdict: {

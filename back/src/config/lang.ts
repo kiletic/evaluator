@@ -5,7 +5,7 @@ const langs: Record<string, any> = {
 		ext: '.cpp'
 	},
 	'haskell': {
-		compile: 'ghc solution.hs -o hello',
+		compile: 'ghc solution.hs -o solution',
 		run: './solution',
 		ext: '.hs'
 	},
