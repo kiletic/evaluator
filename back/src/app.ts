@@ -4,6 +4,7 @@ import session from 'express-session';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import Cors from 'cors';
+import SubmissionQueue from './controllers/submission-queue'
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // config
@@ -42,4 +43,6 @@ app.get('/*', function(req, res) {
   })
 })
 
-export { AutoIncrement };
+const submissionQueue = new SubmissionQueue(4);
+
+export { AutoIncrement, submissionQueue };

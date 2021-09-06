@@ -13,7 +13,7 @@ void init_checker(char** argv) {
 	sout.open(argv[3]);
 
 	if (!in.is_open() || !uout.is_open() || !sout.is_open()) {
-		std::cout << "Cannot opet file stream." << std::endl;
+		std::cout << "Cannot opet file stream.";
 		exit(1);
 	}
 }
@@ -44,17 +44,17 @@ int main(int argc, char** argv) {
 	while (std::getline(uout, uline) && std::getline(sout, sline)) {
 		if (!lines_equal(uline, sline)) {
 			// RETURN WA
-			std::cout << "Wrong answer" << std::endl;
+			std::cout << "Wrong answer";
 			return 0;
 		}
 	}
 
 	if (std::getline(uout, uline) || std::getline(sout, sline)) {
 		// RETURN WA
-		std::cout << "Wrong answer" << std::endl;
+		std::cout << "Wrong answer";
 		return 0;
 	}
 
 	// RETURN AC
-	std::cout << "Accepted" << std::endl;
+	std::cout << "Accepted";
 }

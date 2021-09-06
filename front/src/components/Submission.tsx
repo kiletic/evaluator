@@ -58,9 +58,9 @@ const Submission = () => {
 				<div className = "row">
 				 <div className = "lower cell"> {submission.userName} </div>
 				 <div className = "lower cell"> <NavLink to = {`/problemset/tasks/${submission.task.id}`}> {submission.task.name} </NavLink> </div>
-				 <div className = "lower cell"> {submission.result} </div>
-				 <div className = "lower cell"> Unknown </div>
-				 <div className = "lower cell"> Unknown </div>
+				 <div className = {submission.result.length < 14 ? 'lower cell' : 'cell'}> {submission.result} </div>
+				 <div className = "lower cell"> {submission.timeTaken === -1 ? '???' : submission.timeTaken} ms </div>
+				 <div className = "lower cell"> {submission.memoryTaken === -1 ? '???' : submission.memoryTaken} KB </div>
 				 <div className = "cell"> <div> {submission.date_yyyy} </div> <div> {submission.date_hh} </div> </div>
 				 <div className = "lower cell"> {submission.code.language} </div>
 				</div>

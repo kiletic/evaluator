@@ -3,6 +3,7 @@ import Submission from '../models/submission';
 import Task from '../models/task';
 import fs from 'fs';
 import path from 'path';
+import { submissionQueue } from '../app';
 
 const CreateSubmission = async (req: any) => {
 	const task: any = await Task.findOne({ _id: req.params.id });
@@ -24,58 +25,31 @@ const CreateSubmission = async (req: any) => {
 	const submissionPath = path.join(__dirname, `../../local/submissions/${submission.submissionId}/`);
 
 	fs.mkdirSync(submissionPath);
-	fs.appendFile(path.join(submissionPath, 'code.cpp'), req.body.code, (err) => {
-		if (err) throw err;
-		console.log('Successfully created new file submission.');
-	});
+	fs.appendFileSync(path.join(submissionPath, 'solution.cpp'), req.body.code);
 
-	return submission;
+	return { submission: submission, timeLimit: task.timeLimit, memoryLimit: task.memoryLimit, id: task._id };
 }
 
-const RunSubmission = async (req: any, submission: any) => {
+const PushToQueue = async (task: any) => {
 	try {
-		execSync('c++ hello_world.cpp -o hello_world', { stdio: 'pipe', cwd: './src/lib' });
+		execSync('c++ solution.cpp -O3 -o solution', { stdio: 'pipe', cwd: `./local/submissions/${task.submission.submissionId}`});
+		submissionQueue.push(task);
 	} catch(error) {
 		console.log("Compile error!");
 		console.log(error.stderr.toString());
+
+		task.submission.result = 'Compile Error';
+		task.submission.save();
 		return;
 	}
-
-	const cmd: string = './hello_world';
-
-	// need to get testcases
-	const taskPath = path.join(__dirname, '..', '..', 'local', 'tasks', '1');
-
-	const inputFiles = fs.readdirSync(path.join(taskPath, 'input'));
-	const outputFiles = fs.readdirSync(path.join(taskPath, 'output'));
-	for (var i = 0; i < inputFiles.length; i++) {
-		const input = fs.readFileSync(path.join(taskPath, 'input', inputFiles[i]), 'utf8');
-		const output = fs.readFileSync(path.join(taskPath, 'output', outputFiles[i]), 'utf8');
-	}
-
-	const testcases = [{"input": "1 2", "output" : "3"}, {"input": "1 4", "output" : "5"}, {"input": "1 2", "output" : "3"}];
-
-	for (var i = 0; i < testcases.length; i++) {
-		try {
-			const output = execSync(cmd, { cwd: './src/lib', input: testcases[i].input }).toString();
-			if (output !== testcases[i].output) {
-				console.log(`Wrong answer on testcase ${i + 1}`);
-				return;
-			}
-		} catch(error) {
-			console.log(`Runtime Error on testcase ${i + 1}`);		
-			return;
-		}
-	}
-
-	console.log("Accepted!!!");
 };
 
 const Submit = async (req: any) => {
-	const submission: any = await CreateSubmission(req);
-	RunSubmission(req, submission);
+	const ret = await CreateSubmission(req);
 
-	return submission.submissionId;
+	PushToQueue(ret);
+
+	return ret.submission.submissionId;
 };
 
 const GetSubmission = async (id: number) => {
@@ -84,4 +58,4 @@ const GetSubmission = async (id: number) => {
 	return submission;
 };
 
-export { Submit, CreateSubmission, GetSubmission, RunSubmission }; 
+export { Submit, CreateSubmission, GetSubmission }; 

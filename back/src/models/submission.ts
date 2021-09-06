@@ -17,10 +17,18 @@ const submissionSchema = new Schema({
 		type: String,
 		default: 'Pending'
 	},
+	timeTaken: {
+		type: Number,
+		default: 0 // in ms
+	},
+	memoryTaken: {
+		type: Number,
+		default: 0 // in MB 
+	},
 	testcaseResults: [{
 		verdict: {
 			type: String,
-			enum: ['Pending', 'Accepted', 'Compile Error', 'Wrong Answer', 'Runtime Error', 'Time Limit Exceeded'],
+			enum: ['Pending', 'Accepted', 'Compile Error', 'Wrong Answer', 'Runtime Error', 'Time Limit Exceeded', 'Memory Limit Exceeded', 'Unknown', '???'],
 			default: 'Pending'
 		}, 
 		output: { type: String },

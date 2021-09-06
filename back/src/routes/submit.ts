@@ -5,7 +5,6 @@ var router = express.Router();
 
 router.post('/api/submit/:id', async (req, res) => {
 	const submissionId = await Submit(req);
-	console.log(`From router: ${submissionId}`);
 	
 	res.json({ "submissionId": submissionId });
 });
