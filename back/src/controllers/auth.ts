@@ -33,6 +33,7 @@ const onLogin = async (req: any, res: any) => {
 	if (user) {
 		if (await bcrypt.compare(password, user.password)) {
 			req.session.isAuth = true;
+			req.session.username = username;
 			return res.status(200).json({ message: "Login successful." });
 		} else {
 			return res.status(403).json({ message: "Invalid password." });

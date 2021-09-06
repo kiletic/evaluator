@@ -9,10 +9,22 @@ const taskSchema = new Schema({
 	text: String,
 	inputText: String,
 	outputText: String,
+	timeLimit: {
+		type: Number,
+		default: 2000 // in ms
+	},
+	memoryLimit: {
+		type: Number,
+		default: 512 // in MB 
+	},
 	testcases: [{
 		input: String,
 		output: String,
 		note: String
+	}],
+	hiddenTestcases: [{
+		inputPath: String,
+		outputPath: String
 	}]
 }, { _id: false });
 
