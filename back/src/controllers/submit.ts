@@ -64,4 +64,10 @@ const GetSubmission = async (id: number) => {
 	return submission;
 };
 
-export { Submit, CreateSubmission, GetSubmission }; 
+const GetSubmissionTcRes = async (id: number) => {
+	const submission: any = await GetSubmission(id);
+
+	return submission.testcaseResults;
+};
+
+export { Submit, CreateSubmission, GetSubmission, GetSubmissionTcRes }; 

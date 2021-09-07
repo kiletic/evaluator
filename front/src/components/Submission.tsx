@@ -29,12 +29,22 @@ const Submission = () => {
 						console.log(data.message);	
 					} else {
 						if (data.result === 'Pending' || data.result.includes('Running on test')) {
-							setSubmission({ ...data, result: data.result });
+							setSubmission(data);
 							setTimeout(GetSubmission, 2000);
 						} else {
-							setSubmission({ ...data, result: data.result, testcaseResults: data.testcaseResults });
+							GetTestcaseResults(data);
 						}
 					}
+				});
+		};
+
+		const GetTestcaseResults = async (lastSubmission: any) => {
+			if (!mounted) return;
+
+			fetch(`http://localhost:4000/api/submission/${id}/tcRes`)
+				.then(res => res.json())
+				.then(data => {
+					setSubmission({...lastSubmission, testcaseResults: data})
 				});
 		};
 
@@ -71,6 +81,19 @@ const Submission = () => {
 			</div>
 			<AceEditor mode = {submission.code.language} theme = "cobalt" width = "1400px" showPrintMargin = {false} readOnly = {true} value = {submission.code.content}/>
 			<h2>Testcase results</h2>
+			{submission.testcaseResults.map((testcase: any, index: number) => (
+				<div className = 'tc' key={index}>
+					<h3>{`Testcase #${index + 1} ${testcase.verdict}`}</h3>
+					<div>
+						<h4>Input</h4>
+						<pre>{`${testcase.input}`}</pre>
+					</div>
+					<div>
+						<h4>Output</h4>
+						<pre>{`${testcase.output}`}</pre>
+					</div>
+				</div>
+			))}
 		</div>
 	) : null;
 };

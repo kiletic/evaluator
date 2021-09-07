@@ -130,6 +130,11 @@ class Worker {
 	
 				this.finish_work();
 			} else {
+				this.submission.result = `Accepted`;
+				this.submission.testcaseResults.push({
+					verdict: 'Accepted',
+					output: `${tcNum + 1}.out`
+				});
 				// Go to next testcase
 				this.run_testcase(tcNum + 1);
 			}
