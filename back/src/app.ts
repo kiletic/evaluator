@@ -4,7 +4,7 @@ import session from 'express-session';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import Cors from 'cors';
-import SubmissionQueue from './controllers/submission-queue'
+import SubmissionQueue from './lib/submission-queue'
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // config
@@ -14,6 +14,7 @@ import { dbURI } from './config/db';
 import route_auth from './routes/auth';
 import route_tasks from './routes/tasks';
 import route_submit from './routes/submit';
+import route_judge from './routes/judge';
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(session({
 app.use('/', route_auth);
 app.use('/', route_tasks);
 app.use('/', route_submit);
+app.use('/', route_judge);
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, "../../front/build/index.html"), function(err) {

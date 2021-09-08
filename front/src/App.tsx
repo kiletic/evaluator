@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Task from './components/Task';
 import Submit from './components/Submit';
 import Submission from './components/Submission';
+import AddTask from './components/AddTask';
 
 import AuthContext from './components/AuthContext';
 
@@ -49,6 +50,7 @@ function App() {
 								<Route path = "/problemset/submit/:id" component = {Submit} />
 								<Route path = "/problemset/stats/:id" />
 								<Route path = "/submission/:id" component = {Submission} />
+								<Route path = "/add-task" component = {AddTask}/>
 								<Route exact path = "/problemset" component = {Problemset} />
 							</Switch>
 						)}

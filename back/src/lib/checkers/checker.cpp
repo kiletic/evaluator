@@ -1,22 +1,7 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <vector>
-#include <cassert>
-
-// streams for input, user output and soulution output
-std::ifstream in, uout, sout; 
-
-void init_checker(char** argv) {
-	in.open(argv[1]);
-	uout.open(argv[2]);
-	sout.open(argv[3]);
-
-	if (!in.is_open() || !uout.is_open() || !sout.is_open()) {
-		std::cout << "Cannot opet file stream.";
-		exit(1);
-	}
-}
+#include "checker_lib.h"
 
 bool lines_equal(std::string& uline, std::string& sline) {
 	std::istringstream user(uline), sol(sline); 	
@@ -37,8 +22,7 @@ bool lines_equal(std::string& uline, std::string& sline) {
 }
 
 int main(int argc, char** argv) {
-	assert(argc == 4);
-	init_checker(argv);
+	init_checker(argc, argv);
 
 	std::string uline, sline;
 	while (std::getline(uout, uline) && std::getline(sout, sline)) {

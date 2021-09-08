@@ -62,7 +62,7 @@ class Worker {
 		const cwd: string = this.submissionPath;
 
 		exec(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`,
-		{ cwd: './src/controllers/' }, (error, stdout, stderr) => {
+		{ cwd: './src/lib/run/' }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling python testcase checker.");
 				return;
@@ -110,7 +110,7 @@ class Worker {
 
 		const cmd = './checker' + ' ' + inputFilePath + ' ' + userOutputFilePath + ' ' + correctOutputFilePath; 
 
-		exec(cmd, { cwd: './src/lib/' }, (error, stdout, stderr) => {
+		exec(cmd, { cwd: './src/lib/checkers' }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling checker.");
 				console.log(stderr);
