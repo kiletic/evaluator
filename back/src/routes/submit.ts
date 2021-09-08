@@ -1,5 +1,5 @@
 import express from 'express';
-import { Submit, GetSubmission, GetSubmissionTcRes } from '../controllers/submit';
+import { Submit, GetSubmission, GetSubmissionTcRes, GetTaskSubmissionsByUsername } from '../controllers/submit';
 import { GetTestcaseResults } from '../lib/utils';
 
 var router = express.Router();
@@ -34,6 +34,31 @@ router.get('/api/submission/:id/tcRes', async (req, res) => {
 	} else {
 		res.json({ message: `Submission with id ${req.params.id} doesn't exist.` });
 	}
+});
+
+router.get('/api/submissions/:taskId/user', async (req: any, res: any) => {
+	var submissions: Array<any> = await GetTaskSubmissionsByUsername(parseInt(req.params.taskId), req.session.username);
+
+	// sort by date
+	submissions.sort((x: any, y: any) => {
+		if (x._id.getTimestamp() < y._id.getTimestamp()) {
+			return 1;
+		}
+		return -1;
+	});
+	if (submissions.length > 10) {
+		submissions = submissions.slice(0, 10);
+	}
+	submissions = submissions.map((submission: any) => { 
+		var dateString = submission._id.getTimestamp().toISOString();
+		var date_yyyy = dateString.substring(0, 10);
+		var date_hh = dateString.substring(11, dateString.length - 5);
+
+		return { date: date_yyyy + ' ' + date_hh, result: submission.result, id: submission.submissionId }
+	});
+
+
+	res.json({ submissions: submissions });
 });
 
 export default router;

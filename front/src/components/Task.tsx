@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, NavLink } from 'react-router-dom'
+import { useParams, NavLink, Link } from 'react-router-dom'
 import Parser from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { copyToClipboard } from '../utils';
@@ -9,6 +9,7 @@ import '../scss/Task.scss'
 const Task = () => {
 	const { id } = useParams() as any;
 	const [task, setTask]: any = useState({});
+	const [submissions, setSubmissions] = useState([]);
 
 	const taskPath = "/problemset/tasks/" + id;
 	const submitPath = "/problemset/submit/" + id;
@@ -30,6 +31,37 @@ const Task = () => {
 				}
 				setTask(data);
 			});
+
+		fetch(`http://localhost:4000/api/submissions/${id}/user`)
+			.then(res => res.json())
+			.then(data => setSubmissions(data.submissions.map((submission: any) => {
+				var result;
+				if (submission.result === 'Accepted') {
+					result = 'AC';
+				} else {
+					var splitted: Array<string> = submission.result.split(" ");
+					if (splitted[0] === 'Wrong') {
+						result = 'WA';
+					} else if (splitted[0] === 'Time') {
+						result = 'TLE';
+					} else if (splitted[0] === 'Runtime') {
+						result = 'RTE';
+					} else if (splitted[0] === 'Unknown') {
+ 						result = '?';
+					} else if (splitted[0] === 'Compile') {
+						result = 'CE';
+					} else if (splitted[0] == 'Pending') {
+						result = 'Pending';
+					} else {
+						result = '...';
+					}
+
+					if (splitted[0] !== 'Pending' && splitted[0] !== 'Compile') {
+						result += ' ' + splitted[splitted.length - 1];
+					}
+				}
+				return {...submission, result: result};
+			})));
 	}, [id]);
 
 	useEffect(() => {
@@ -86,6 +118,14 @@ const Task = () => {
 				</div>
 				<div className = "history">
 					<h3> My submissions </h3>	
+					{submissions.length > 0 ? submissions.map((submission: any, index: number) => (
+						<Link to = {`/submission/${submission.id}`} key = {index}>
+							<div className = "submission"> 
+								<div className = "date"> {submission.date} </div>
+								<div className = "result"> {submission.result} </div>
+							</div>
+						</Link>
+					)) : <div>{"You have no submissions yet"}</div>}
 				</div>
 			</div>
 		</div>

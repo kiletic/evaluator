@@ -74,4 +74,8 @@ const GetSubmissionTcRes = async (id: number) => {
 	return submission.testcaseResults;
 };
 
-export { Submit, CreateSubmission, GetSubmission, GetSubmissionTcRes }; 
+const GetTaskSubmissionsByUsername = async (taskId: number, userName: string) => {
+	return await Submission.find({ userName: userName, "task.id": taskId });
+}
+
+export { Submit, CreateSubmission, GetSubmission, GetSubmissionTcRes, GetTaskSubmissionsByUsername }; 

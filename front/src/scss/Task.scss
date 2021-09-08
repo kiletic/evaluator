@@ -13,13 +13,16 @@
 	}
 
 	.history {
-		display: flex;
-		justify-content: center;
+		text-align: center;
 		margin-left: 100px;
 		margin-top: 150px;
 		width: 300px;
 		height: 500px;
-		border: 2px solid grey;
+
+		.submission {
+			border: 1px solid grey;
+			margin-bottom: 1px;
+		}
 	}
 
 	.bar {
