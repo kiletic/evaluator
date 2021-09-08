@@ -17,14 +17,14 @@ const taskSchema = new Schema({
 		type: Number,
 		default: 512 // in MB 
 	},
+	checker: {
+		type: String,
+		default: 'default'
+	},
 	testcases: [{
 		input: String,
 		output: String,
 		note: String
-	}],
-	hiddenTestcases: [{
-		inputPath: String,
-		outputPath: String
 	}]
 }, { _id: false });
 

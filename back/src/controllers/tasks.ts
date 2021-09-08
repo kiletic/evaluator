@@ -12,4 +12,32 @@ const GetTask = async (id: number) => {
 	return task;
 };
 
-export { GetTasks, GetTask };
+const SaveTask = async (task: any) => {
+	const testcases: Array<any> = [];
+	for (var i = 0; i < task.testcases.length; i++) {
+		const testcase = task.testcases[i];
+
+		if (testcase.sample) {
+			testcases.push({
+				input: testcase.input,
+				output: testcase.output,
+				note: testcase.note
+			});
+		}
+	}
+
+	const newTask = new Task({
+		name: task.name,
+		text: task.statement,
+		inputText: task.input,
+		outputText: task.output,
+		timeLimit: parseInt(task.timelimit),
+		memoryLimit: parseInt(task.memorylimit),
+		testcases: testcases
+	});
+	await newTask.save();
+
+	return newTask;
+}
+
+export { GetTasks, GetTask, SaveTask };

@@ -10,6 +10,7 @@ class Worker {
 	time: number;
 	memory: number;
 	runCmd: string;
+	checkerPath: string;
 
 	constructor() {
 		this.submission = null;
@@ -18,6 +19,7 @@ class Worker {
 		this.time = 0;
 		this.memory = 0;
 		this.runCmd = "";
+		this.checkerPath = "";
 	}
 
 	jobless() {
@@ -30,9 +32,10 @@ class Worker {
 		this.taskInfo.timeLimit = task.timeLimit;
 		this.taskInfo.memoryLimit = task.memoryLimit;
 		// dont forget to change '1' to task ID!!!
-		this.taskInfo.path = path.join(__dirname, '..', '..', 'local', 'tasks', '1');
+		this.taskInfo.path = path.join(__dirname, '..', '..', 'local', 'tasks', `${task.id}`);
 		this.taskInfo.inputs = fs.readdirSync(path.join(this.taskInfo.path, 'input'));
 		this.runCmd = task.run;
+		this.checkerPath = task.checkerPath; 
 
 		console.log("Starting to evaluate new submission!");
 		this.run_testcase(0);

@@ -17,7 +17,7 @@ router.post('/api/judge/compile', async (req, res) => {
 			return;
 		}
 
-		exec(langs['c_cpp'].compile + ' -I ../../../src/lib/checkers/', { cwd: './local/test/compile' }, (error, stdout, stderr) => {
+		exec(langs['c_cpp'].compile('solution') + ' -I ../../../src/lib/checkers/', { cwd: './local/test/compile' }, (error, stdout, stderr) => {
 			if (error) {
 				res.json({ verdict: "Compile error", stderr: stderr })
 				return;
@@ -47,13 +47,13 @@ router.post('/api/judge/run', async (req, res) => {
 				return;
 			}
 
-			exec(langs[req.body.solution.language].compile, { cwd: './local/test/run/' }, (error, stdout, stderr) => {
+			exec(langs[req.body.solution.language].compile('solution'), { cwd: './local/test/run/' }, (error, stdout, stderr) => {
 				if (error) {
 					res.json({ verdict: "Compile error", stderr: stderr })
 					return;
 				}	
 
-				exec(`python3 run_tc.py ${SOL_DIR} ${parseInt(req.body.timelimit) / 1000} ${parseInt(req.body.memorylimit) * 1024 * 1024} ${INPUT_PATH} ${langs[req.body.solution.language].run}`, { cwd: './src/lib/run/' }, (error, stdout, stderr) => {
+				exec(`python3 run_tc.py ${SOL_DIR} ${parseInt(req.body.timelimit) / 1000} ${parseInt(req.body.memorylimit) * 1024 * 1024} ${INPUT_PATH} ${langs[req.body.solution.language].run('solution')}`, { cwd: './src/lib/run/' }, (error, stdout, stderr) => {
 					if (error) {
 						res.json({ verdict: "Error", stderr: "Unexpected error with python testcase checker." })
 						return;

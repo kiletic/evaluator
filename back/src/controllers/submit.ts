@@ -32,8 +32,12 @@ const CreateSubmission = async (req: any) => {
 }
 
 const PushToQueue = async (req: any, task: any) => {
+	const checkerPath: string = task.checker === 'default'
+		? path.join(__dirname, '../lib/checkers/')
+		: path.join(__dirname, `../../local/tasks/${task._id}`);
+
 	if (langs[req.body.language].compile) {
-		exec(langs[req.body.language].compile, { cwd: `./local/submissions/${task.submission.submissionId}` }, (error, stdout, stderr) => {
+		exec(langs[req.body.language].compile('solution'), { cwd: `./local/submissions/${task.submission.submissionId}` }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Compile error!");
 				console.log(stderr);
@@ -43,10 +47,10 @@ const PushToQueue = async (req: any, task: any) => {
 				return;
 			}
 
-			submissionQueue.push({...task, run: langs[req.body.language].run});
+			submissionQueue.push({...task, run: langs[req.body.language].run('solution'), checkerPath: checkerPath});
 		})	
 	} else {
-		submissionQueue.push({...task, run: langs[req.body.language].run});
+		submissionQueue.push({...task, run: langs[req.body.language].run('solution'), checkerPath: checkerPath});
 	}
 };
 

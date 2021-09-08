@@ -82,7 +82,18 @@ const AddTask = () => {
 	};
 
 	const saveTask = async () => {
-		
+		if (custom && !task.checker.isCompiled) {
+			console.log("Compile the checker before saving task.");
+			return;
+		}
+
+		fetch('http://localhost:4000/api/tasks/add', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(custom ? task : {...task, checker: null})
+		})	
 	};
 
 	return (
@@ -160,11 +171,12 @@ const AddTask = () => {
 								<textarea onChange = {e => changeTestcase('output', e.target.value, index)} value = {testcase.output}/>
 								<button onClick = {() => generateOutput(index)}> Generate output </button>
 							</div>
-
+							
+							{testcase.sample && 
 							<div>
 								Note	
 								<textarea onChange = {e => changeTestcase('note', e.target.value, index)} value = {testcase.note}/>
-							</div>
+							</div>}
 
 							<div>
 								Sample	

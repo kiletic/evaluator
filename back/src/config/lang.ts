@@ -1,16 +1,16 @@
 const langs: Record<string, any> = {
 	'c_cpp': {
-		compile: 'c++ solution.cpp -O3 -std=c++17 -o solution',
-		run: './solution',
+		compile: (name: string) => `c++ ${name}.cpp -O3 -std=c++17 -o ${name}`,
+		run: (name: string) => `./${name}`,
 		ext: '.cpp'
 	},
 	'haskell': {
-		compile: 'ghc solution.hs -o solution',
-		run: './solution',
+		compile: (name: string) => `ghc ${name}.hs -o ${name}`,
+		run: (name: string) => `./${name}`,
 		ext: '.hs'
 	},
 	'python': {
-		run: 'python3 solution.py',
+		run: (name: string) => `python3 ${name}.py`,
 		ext: '.py'
 	}
 };
