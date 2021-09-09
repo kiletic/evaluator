@@ -1,15 +1,14 @@
 import Submission from '../models/submission';
-import Task from '../models/task';
+
 import { promises as fs } from 'fs';
 import path from 'path';
+
 import { submissionQueue } from '../app';
 import langs from '../config/lang';
-import util from 'util';
-const exec = util.promisify(require('child_process').exec);
+import { Compile } from '../controllers/judge';
+import { GetTask } from '../controllers/tasks';
 
-const CreateSubmission = async (req: any) => {
-	const task: any = await Task.findOne({ taskId: req.params.id });
-
+const CreateSubmission = async (req: any, task: any) => {
 	const submission: any = new Submission({
 		userName: req.session.username,
 		code: {
@@ -17,7 +16,7 @@ const CreateSubmission = async (req: any) => {
 			language: req.body.language 
 		},
 		task: {
-			id: req.params.id,
+			id: task.taskId,
 			name: task.name 
 		},
 		testcaseResults: []		
@@ -29,36 +28,37 @@ const CreateSubmission = async (req: any) => {
 	await fs.mkdir(submissionPath);
 	await fs.appendFile(path.join(submissionPath, 'solution' + langs[req.body.language].ext), req.body.code);
 
-	return { submission: submission, timeLimit: task.timeLimit, memoryLimit: task.memoryLimit, id: task.taskId };
+	return submission; 
 }
 
-const PushToQueue = async (req: any, task: any) => {
-	const checkerPath: string = task.checker === 'default'
+const PushToQueue = async (language: string, submissionInfo: any) => {
+	const checkerPath: string = submissionInfo.checker === 'default'
 		? path.join(__dirname, '../lib/checkers/')
-		: path.join(__dirname, `../../local/tasks/${task.taskId}`);
+		: path.join(__dirname, `../../local/submissionInfos/${submissionInfo.taskId}`);
 
-	if (langs[req.body.language].compile) {
+	if (langs[language].compile) {
 		try {
-			await exec(langs[req.body.language].compile('solution'), { cwd: `./local/submissions/${task.submission.submissionId}` });
+			await Compile('solution', language, `./local/submissions/${submissionInfo.submission.submissionId}`);
 		} catch(error) {
 			console.log("Compile error!");
 			console.log(error.stderr);
 
-			task.submission.result = 'Compile Error';
-			task.submission.save();
+			submissionInfo.submission.result = 'Compile Error';
+			submissionInfo.submission.save();
 			return;
 		}
 	} 
 
-	submissionQueue.push({...task, run: langs[req.body.language].run('solution'), checkerPath: checkerPath});
+	submissionQueue.push({...submissionInfo, run: langs[language].run('solution'), checkerPath: checkerPath});
 };
 
 const Submit = async (req: any) => {
-	const ret = await CreateSubmission(req);
+	const task: any = await GetTask(req.params.id);
+	const submission: any = await CreateSubmission(req, task);
 
-	PushToQueue(req, ret);
+	PushToQueue(req.body.language, { submission: submission, timeLimit: task.timeLimit, memoryLimit: task.memoryLimit, taskId: task.taskId });
 
-	return ret.submission.submissionId;
+	return submission.submissionId;
 };
 
 const GetSubmission = async (id: number) => {

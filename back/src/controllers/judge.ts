@@ -2,9 +2,9 @@ import langs from '../config/lang';
 import util from 'util';
 const exec = util.promisify(require('child_process').exec);
 
-const Compile = async (name: string, language: string, cwd: string) => {
+const Compile = async (name: string, language: string, cwd: string, isChecker: boolean = false) => {
 	try {
-		await exec(langs[language].compile(name) + ' -I ../../../src/lib/checkers/', { cwd: cwd });
+		await exec(langs[language].compile(name) + (isChecker ? ' -I ../../../src/lib/checkers/' : ''), { cwd: cwd });
 	} catch(error) {
 		throw error;
 	}

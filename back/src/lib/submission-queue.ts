@@ -1,7 +1,8 @@
 import queue from 'queue-fifo';
 import path from 'path';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import { exec } from 'child_process';
+import { Run } from '../controllers/judge';
 
 class Worker {
 	submission: any;
@@ -26,16 +27,15 @@ class Worker {
 		return this.submission ? false : true;
 	}
 	
-	async assign(task: any) {
-		this.submission = task.submission;
+	async assign(submissionInfo: any) {
+		this.submission = submissionInfo.submission;
 		this.submissionPath = path.join(__dirname, `../../local/submissions/${this.submission.submissionId}`);
-		this.taskInfo.timeLimit = task.timeLimit;
-		this.taskInfo.memoryLimit = task.memoryLimit;
-		// dont forget to change '1' to task ID!!!
-		this.taskInfo.path = path.join(__dirname, '..', '..', 'local', 'tasks', `${task.id}`);
-		this.taskInfo.inputs = fs.readdirSync(path.join(this.taskInfo.path, 'input'));
-		this.runCmd = task.run;
-		this.checkerPath = task.checkerPath; 
+		this.taskInfo.timeLimit = submissionInfo.timeLimit;
+		this.taskInfo.memoryLimit = submissionInfo.memoryLimit;
+		this.taskInfo.path = path.join(__dirname, '..', '..', 'local', 'tasks', `${submissionInfo.taskId}`);
+		this.taskInfo.inputs = await fs.readdir(path.join(this.taskInfo.path, 'input'));
+		this.runCmd = submissionInfo.run;
+		this.checkerPath = submissionInfo.checkerPath; 
 
 		console.log("Starting to evaluate new submission!");
 		this.run_testcase(0);
@@ -62,32 +62,31 @@ class Worker {
 		console.log(`Running on testcase ${tcNum + 1}...`);
 
 		const INPUT_PATH: string = path.join(this.taskInfo.path, 'input', this.taskInfo.inputs[tcNum]);
-		const cwd: string = this.submissionPath;
 
-		exec(`python3 run_tc.py ${cwd} ${this.taskInfo.timeLimit / 1000} ${this.taskInfo.memoryLimit * 1024 * 1024} ${INPUT_PATH} ${this.runCmd}`,
-		{ cwd: './src/lib/run/' }, (error, stdout, stderr) => {
-			if (error) {
-				console.log("Unexpected error when calling python testcase checker.");
-				return;
-			}
-			const message: any = JSON.parse(stdout);
+		try {
+			const { stdout } = await Run(this.submissionPath, 
+																	 this.taskInfo.timeLimit / 1000, 
+																	 this.taskInfo.memoryLimit * 1024 * 1024,
+																	 INPUT_PATH,
+																	 this.runCmd,
+																	 './src/lib/run');
 
-			this.time = Math.max(this.time, Math.floor(message.time * 1000));
-			this.memory = Math.max(this.memory, Math.floor(message.memory));
+			this.time = Math.max(this.time, Math.floor(stdout.time * 1000));
+			this.memory = Math.max(this.memory, Math.floor(stdout.memory));
 			
 			// save output
-			fs.appendFileSync(path.join(this.submissionPath, `${tcNum + 1}.out`), message.output);
+			await fs.appendFile(path.join(this.submissionPath, `${tcNum + 1}.out`), stdout.output);
 
-			if (message.verdict === 'okay') {
+			if (stdout.verdict === 'okay') {
 				// SEND TO CHECKER
 				this.check_output(tcNum);	
 			} else {
 				let verdict: string;
-				if (message.verdict === 'tle') {
+				if (stdout.verdict === 'tle') {
 					verdict = 'Time Limit Exceeded';
-				} else if (message.verdict === 'rte') {
+				} else if (stdout.verdict === 'rte') {
 					verdict = 'Runtime Error';
-				} else if (message.verdict === 'mle') {
+				} else if (stdout.verdict === 'mle') {
 					verdict = 'Memory Limit Exceeded';
 				} else {
 					verdict = 'Unknown';
@@ -103,7 +102,12 @@ class Worker {
 
 				this.finish_work();
 			}
-		});	
+		} catch(error) {
+			console.log("Unexpected error when calling python testcase checker.");
+			
+			console.log(error);
+			return;
+		}
 	}
 
 	async check_output(tcNum: number) {
@@ -161,15 +165,15 @@ class SubmissionQueue {
 		}
 	}
 
-	assign_submission() {
+	async assign_submission() {
 		if (this.submissions.isEmpty()) {
 			return;
 		}
 
 		for (var i = 0; i < this.numWorkers; i++) {
 			if (this.workers[i].jobless()) {
-				const task = this.submissions.dequeue();
-				this.workers[i].assign(task);
+				const submission = this.submissions.dequeue();
+				this.workers[i].assign(submission);
 				break;
 			}
 		}
