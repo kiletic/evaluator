@@ -8,7 +8,7 @@ import util from 'util';
 const exec = util.promisify(require('child_process').exec);
 
 const CreateSubmission = async (req: any) => {
-	const task: any = await Task.findOne({ _id: req.params.id });
+	const task: any = await Task.findOne({ taskId: req.params.id });
 
 	const submission: any = new Submission({
 		userName: req.session.username,
@@ -29,13 +29,13 @@ const CreateSubmission = async (req: any) => {
 	await fs.mkdir(submissionPath);
 	await fs.appendFile(path.join(submissionPath, 'solution' + langs[req.body.language].ext), req.body.code);
 
-	return { submission: submission, timeLimit: task.timeLimit, memoryLimit: task.memoryLimit, id: task._id };
+	return { submission: submission, timeLimit: task.timeLimit, memoryLimit: task.memoryLimit, id: task.taskId };
 }
 
 const PushToQueue = async (req: any, task: any) => {
 	const checkerPath: string = task.checker === 'default'
 		? path.join(__dirname, '../lib/checkers/')
-		: path.join(__dirname, `../../local/tasks/${task._id}`);
+		: path.join(__dirname, `../../local/tasks/${task.taskId}`);
 
 	if (langs[req.body.language].compile) {
 		try {

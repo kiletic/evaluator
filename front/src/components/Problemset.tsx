@@ -18,7 +18,7 @@ const Problemset = () => {
 		<div className = "Problemset">
 			<div className = "container">
 				{tasks.map((task: any) => (
-					<Link to = {`/problemset/tasks/${task._id}`} key = {task._id}>
+					<Link to = {`/problemset/tasks/${task.taskId}`} key = {task.taskId}>
 						<div className = "row">
 							<div className = "task-name">
 								<TaskRow content = {task.name} />

@@ -18,12 +18,12 @@ router.get('/api/tasks/:id', async (req, res) => {
 });
 
 router.post('/api/tasks/add', async (req, res) => {
-	const task = await SaveTask(req.body); 
+	const task: any = await SaveTask(req.body); 
 
-	await CreateTaskDir(task._id);
+	await CreateTaskDir(task.taskId);
 
 	if (req.body.checker) {
-		const err = await SaveAndCompileChecker(task._id, req.body.checker.code);
+		const err = await SaveAndCompileChecker(task.taskId, req.body.checker.code);
 		if (err) {
 			console.log("SaveAndCompile returned error.");
 			console.log(err);
@@ -31,10 +31,10 @@ router.post('/api/tasks/add', async (req, res) => {
 	}
 
 	// Save testcases
-	SaveTaskIO(task._id, req.body.testcases)
+	SaveTaskIO(task.taskId, req.body.testcases)
 
 	// Save solution
-	SaveSolution(task._id, req.body.solution.code, req.body.solution.language);	
+	SaveSolution(task.taskId, req.body.solution.code, req.body.solution.language);	
 })
 
 
