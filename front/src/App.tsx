@@ -13,11 +13,11 @@ import AddTask from './components/AddTask';
 import AuthContext from './components/AuthContext';
 
 function App() {
-	const [auth, setAuth] = useState(false);
-	const [checkForAuth, setCheckForAuth] = useState(false);
+	const [auth, setAuth] = useState(true);
+	const [checkForAuth, setCheckForAuth] = useState(true);
 
 	useEffect(() => {
-		//return;
+		return;
 		fetch('http://localhost:4000/api/check-auth', { 
 			method: "GET",
 		}).then(res => res.json())

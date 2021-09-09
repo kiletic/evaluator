@@ -1,5 +1,5 @@
 import express from 'express';
-import { Submit, GetSubmission, GetSubmissionTcRes, GetTaskSubmissionsByUsername } from '../controllers/submit';
+import { Submit, GetSubmission, GetTaskSubmissionsByUsername } from '../controllers/submit';
 import { GetTestcaseResults } from '../lib/utils';
 
 var router = express.Router();
