@@ -66,10 +66,4 @@ const SaveSolution = async (taskId: number, code: string, language: string) => {
 	fs.writeFile(path.join(taskPath, 'solution' + langs[language].ext), code);		
 }
 
-const CreateTaskDir = async (taskId: number) => {
-	const taskPath: string = path.join(tasksPath, `${taskId}`);
-
-	fs.mkdir(taskPath);
-};
-
-export { GetSubmissionCode, GetTestcaseResults, SaveTaskIO, SaveAndCompileChecker, SaveSolution, CreateTaskDir };
+export { GetSubmissionCode, GetTestcaseResults, SaveTaskIO, SaveAndCompileChecker, SaveSolution };

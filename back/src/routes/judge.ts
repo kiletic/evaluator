@@ -2,25 +2,24 @@ import express from 'express';
 import langs from '../config/lang';
 import { promises as fs } from 'fs';
 import path from 'path';
-import util from 'util';
-const exec = util.promisify(require('child_process').exec);
+import { Compile, Run } from '../controllers/judge';
 
 var router = express.Router();
 
 router.post('/api/judge/compile', async (req, res) => {
-	// TODO: For now this is only for c++ code that came from add-task, in the future rewrite this to be more general.	
+	// TODO: For now this is only for checker written in c++ that came from add-task, in the future rewrite this to be more general.	
 	
 	try {
 		await fs.writeFile(path.join(__dirname, '../../local/test/compile/solution.cpp'), req.body.code);	
 	} catch(error) {	
-		res.json({ verdict: "Compile error", stderr: "Failed to create checker file." });
+		res.json({ verdict: "Error", stderr: "Failed to create checker file." });
 		console.log(error.sterr);
 
 		return;
 	} 
 
 	try {
-		await exec(langs['c_cpp'].compile('solution') + ' -I ../../../src/lib/checkers/', { cwd: './local/test/compile' });
+		await Compile('solution', 'c_cpp', './local/test/compile');
 	} catch(error) {
 		res.json({ verdict: "Compile error", stderr: error.stderr })
 
@@ -54,7 +53,7 @@ router.post('/api/judge/run', async (req, res) => {
 	}
 
 	try {
-		await exec(langs[req.body.solution.language].compile('solution'), { cwd: './local/test/run/' });
+		await Compile('solution', req.body.solution.language, './local/test/run/'); 
 	} catch(error) {
 		res.json({ verdict: "Compile error", stderr: error.stderr })
 
@@ -62,18 +61,17 @@ router.post('/api/judge/run', async (req, res) => {
 	}
 
 	try {
-		const { stdout } = await exec(`python3 run_tc.py ${SOL_DIR} ${parseInt(req.body.timelimit) / 1000} ${parseInt(req.body.memorylimit) * 1024 * 1024} ${INPUT_PATH} ${langs[req.body.solution.language].run('solution')}`, { cwd: './src/lib/run/' });
+		const { stdout } = await Run(SOL_DIR, parseInt(req.body.timelimit) / 1000, parseInt(req.body.memorylimit) * 1024 * 1024, INPUT_PATH, langs[req.body.solution.language].run('solution'), './src/lib/run/');
 
-		const message: any = JSON.parse(stdout);
-		if (message.verdict == 'okay') {
-			res.json({ verdict: "okay", stderr: message.output });
+		if (stdout.verdict == 'okay') {
+			res.json({ verdict: "okay", stderr: stdout.output });
 		} else {
 			let verdict: string;
-			if (message.verdict === 'tle') {
+			if (stdout.verdict === 'tle') {
 				verdict = 'Time Limit Exceeded';
-			} else if (message.verdict === 'rte') {
+			} else if (stdout.verdict === 'rte') {
 				verdict = 'Runtime Error';
-			} else if (message.verdict === 'mle') {
+			} else if (stdout.verdict === 'mle') {
 				verdict = 'Memory Limit Exceeded';
 			} else {
 				verdict = 'Unknown';
@@ -85,7 +83,6 @@ router.post('/api/judge/run', async (req, res) => {
 
 		return;
 	}
-
 });
 
 export default router;

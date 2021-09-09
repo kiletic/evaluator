@@ -1,4 +1,8 @@
 import Task from '../models/task';
+import path from 'path';
+import { promises as fs } from 'fs';
+
+const tasksPath: string = path.join(__dirname, '..', '..', 'local', 'tasks') 
 
 const GetTasks = async () => {
 	const tasks = await Task.find();
@@ -40,4 +44,10 @@ const SaveTask = async (task: any) => {
 	return newTask;
 }
 
-export { GetTasks, GetTask, SaveTask };
+const CreateTaskDir = async (taskId: number) => {
+	const taskPath: string = path.join(tasksPath, `${taskId}`);
+
+	fs.mkdir(taskPath);
+};
+
+export { GetTasks, GetTask, SaveTask, CreateTaskDir };
