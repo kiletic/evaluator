@@ -63,7 +63,7 @@ router.post('/api/judge/run', async (req, res) => {
 	try {
 		const { stdout } = await Run(SOL_DIR, parseInt(req.body.timelimit) / 1000, parseInt(req.body.memorylimit) * 1024 * 1024, INPUT_PATH, langs[req.body.solution.language].run('solution'), './src/lib/run/');
 
-		if (stdout.verdict == 'okay') {
+		if (stdout.verdict === 'okay') {
 			res.json({ verdict: "okay", stderr: stdout.output });
 		} else {
 			let verdict: string;

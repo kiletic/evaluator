@@ -1,6 +1,6 @@
 import express from 'express';
 import { GetTasks, GetTask, SaveTask, CreateTaskDir } from '../controllers/tasks';; 
-import { SaveTaskIO, SaveAndCompileChecker, SaveSolution } from '../lib/utils';
+import { SaveTaskIO, SaveAndCompileChecker, SaveSolution } from '../utils';
 
 var router = express.Router();
 

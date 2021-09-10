@@ -50,7 +50,7 @@ const Task = () => {
  						result = '?';
 					} else if (splitted[0] === 'Compile') {
 						result = 'CE';
-					} else if (splitted[0] == 'Pending') {
+					} else if (splitted[0] === 'Pending') {
 						result = 'Pending';
 					} else {
 						result = '...';

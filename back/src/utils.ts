@@ -1,11 +1,11 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import langs from '../config/lang';
+import langs from './config/lang';
 import util from 'util';
 const exec = util.promisify(require('child_process').exec);
 
-const submissionsPath: string = path.join(__dirname, '..', '..', 'local', 'submissions');
-const tasksPath: string = path.join(__dirname, '..', '..', 'local', 'tasks') 
+const submissionsPath: string = path.join(__dirname, '..', 'local', 'submissions');
+const tasksPath: string = path.join(__dirname, '..', 'local', 'tasks') 
 
 const GetSubmissionCode = async (submissionId: number) => {
 	return await fs.readFile(path.join(submissionsPath, `${submissionId}`, 'solution.cpp'));
@@ -51,7 +51,7 @@ const SaveAndCompileChecker = async (taskId: number, code: string) => {
 	const taskPath: string = path.join(tasksPath, `${taskId}`);
 	await fs.writeFile(path.join(taskPath, 'checker.cpp'), code);		
 
-	const { error, stderr } = await exec(langs['c_cpp'].compile('checker') + ' -I /checkers/', { cwd: taskPath });					
+	const { error, stderr } = await exec(langs['c_cpp'].compile('checker') + ' -I /lib/checkers/', { cwd: taskPath });					
 
 	if (error) {
 		return stderr;

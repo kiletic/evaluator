@@ -26,7 +26,7 @@ const CreateSubmission = async (req: any, task: any) => {
 	const submissionPath = path.join(__dirname, `../../local/submissions/${submission.submissionId}/`);
 
 	await fs.mkdir(submissionPath);
-	await fs.appendFile(path.join(submissionPath, 'solution' + langs[req.body.language].ext), req.body.code);
+	await fs.writeFile(path.join(submissionPath, 'solution' + langs[req.body.language].ext), req.body.code);
 
 	return submission; 
 }

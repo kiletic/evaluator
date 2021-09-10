@@ -2,7 +2,7 @@ import queue from 'queue-fifo';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { exec } from 'child_process';
-import { Run } from '../controllers/judge';
+import { Run } from './controllers/judge';
 
 class Worker {
 	submission: any;
@@ -29,10 +29,10 @@ class Worker {
 	
 	async assign(submissionInfo: any) {
 		this.submission = submissionInfo.submission;
-		this.submissionPath = path.join(__dirname, `../../local/submissions/${this.submission.submissionId}`);
+		this.submissionPath = path.join(__dirname, `../local/submissions/${this.submission.submissionId}`);
 		this.taskInfo.timeLimit = submissionInfo.timeLimit;
 		this.taskInfo.memoryLimit = submissionInfo.memoryLimit;
-		this.taskInfo.path = path.join(__dirname, '..', '..', 'local', 'tasks', `${submissionInfo.taskId}`);
+		this.taskInfo.path = path.join(__dirname, '..', 'local', 'tasks', `${submissionInfo.taskId}`);
 		this.taskInfo.inputs = await fs.readdir(path.join(this.taskInfo.path, 'input'));
 		this.runCmd = submissionInfo.run;
 		this.checkerPath = submissionInfo.checkerPath; 
@@ -49,7 +49,7 @@ class Worker {
 		this.memory = 0;
 	}
 
-	async run_testcase(tcNum: number) {
+	async run_testcase(tcNum: number, iteration: number = 0) {
 		if (tcNum === this.taskInfo.inputs.length) {
 			// THE END -> ACCEPTED!
 			this.submission.result = 'Accepted';
@@ -71,23 +71,30 @@ class Worker {
 																	 this.runCmd,
 																	 './src/lib/run');
 
-			this.time = Math.max(this.time, Math.floor(stdout.time * 1000));
+
+			// update only if less than timelimit (because of re-runs)
+			if (stdout.time * 1000 < this.taskInfo.timeLimit)
+				this.time = Math.max(this.time, Math.floor(stdout.time * 1000));
 			this.memory = Math.max(this.memory, Math.floor(stdout.memory));
 			
 			// save output
-			await fs.appendFile(path.join(this.submissionPath, `${tcNum + 1}.out`), stdout.output);
+			await fs.writeFile(path.join(this.submissionPath, `${tcNum + 1}.out`), stdout.output);
 
 			if (stdout.verdict === 'okay') {
 				// SEND TO CHECKER
 				this.check_output(tcNum);	
 			} else {
 				let verdict: string;
-				if (stdout.verdict === 'tle') {
-					verdict = 'Time Limit Exceeded';
+				 if (stdout.verdict === 'tle close' && iteration < 2) {
+					this.run_testcase(tcNum, iteration + 1);
+
+					return;
 				} else if (stdout.verdict === 'rte') {
 					verdict = 'Runtime Error';
 				} else if (stdout.verdict === 'mle') {
 					verdict = 'Memory Limit Exceeded';
+				} else if (stdout.verdict === 'tle' || stdout.verdict === 'tle close') {
+					verdict = 'Time Limit Exceeded';
 				} else {
 					verdict = 'Unknown';
 				}
