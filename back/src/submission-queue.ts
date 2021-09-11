@@ -109,7 +109,7 @@ class Worker {
 
 				this.finish_work();
 			}
-		} catch(error) {
+		} catch (error) {
 			console.log("Unexpected error when calling python testcase checker.");
 			
 			console.log(error);

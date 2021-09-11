@@ -47,7 +47,7 @@ const SaveTask = async (task: any) => {
 const CreateTaskDir = async (taskId: number) => {
 	const taskPath: string = path.join(tasksPath, `${taskId}`);
 
-	fs.mkdir(taskPath);
+	await fs.mkdir(taskPath);
 };
 
 export { GetTasks, GetTask, SaveTask, CreateTaskDir };

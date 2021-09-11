@@ -1,19 +1,32 @@
 import express from 'express';
-import { GetTasks, GetTask, SaveTask, CreateTaskDir } from '../controllers/tasks';; 
+import { GetTasks, GetTask, SaveTask, CreateTaskDir } from '../controllers/tasks';
+import { CheckTaskSolved } from '../controllers/submit';
 import { SaveTaskIO, SaveAndCompileChecker, SaveSolution } from '../utils';
 
 var router = express.Router();
 
-router.get('/api/tasks', async (req, res) => {
-	const tasks = await GetTasks();
+router.get('/api/tasks', async (req: any, res: any) => {
+	var tasks: Array<any> = await GetTasks();
 
-	res.status(200).json(tasks);
+	tasks = await Promise.all(tasks.map(async task => {
+		const solvedStatus: boolean | null = await CheckTaskSolved(task.taskId, req.session.username);
+		console.log(solvedStatus);
+		if (solvedStatus === true) {
+			return {...task.toJSON(), solved: true };
+		} else if (solvedStatus === false) {
+			return {...task.toJSON(), solved: false };
+		} else {
+			return task.toJSON();
+		}
+	}));
+
+	res.json(tasks);
 });
 
 router.get('/api/tasks/:id', async (req, res) => {
 	const task = await GetTask(parseInt(req.params.id));
 	
-	res.status(200).json(task);
+	res.json(task);
 });
 
 router.post('/api/tasks/add', async (req, res) => {

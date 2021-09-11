@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import '../scss/Problemset.scss'
 import TaskRow from './TaskRow' 
 
+import { BsCheck, BsX } from 'react-icons/bs';
+
 const Problemset = () => {
 	const [tasks, setTasks] = useState([]);
 
@@ -23,9 +25,12 @@ const Problemset = () => {
 							<div className = "task-name">
 								<TaskRow content = {task.name} />
 							</div>
-							<div className = "task-solved-icon">
-								<img src = "https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Tick_Mark_Dark-256.png" alt = "solved"></img>
-							</div>
+							{task.solved === false &&
+								<BsX color = "red" fontSize = {"30px"} strokeWidth = {1.3} />
+							}
+							{task.solved === true &&
+								<BsCheck color = "green" fontSize = {"30px"} strokeWidth = {1.7} />
+							}
 						</div>
 					</Link>
 				))}

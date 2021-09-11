@@ -38,6 +38,8 @@ const GetTestcaseResults = async (submissionId: number, testcases: any, taskId: 
 const SaveTaskIO = async (taskId: number, testcases: Array<any>) => {
 	const taskPath: string = path.join(tasksPath, `${taskId}`);	
 
+	console.log("HERE");
+
 	await fs.mkdir(path.join(taskPath, 'input'));
 	await fs.mkdir(path.join(taskPath, 'output'));
 

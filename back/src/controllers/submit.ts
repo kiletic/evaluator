@@ -39,7 +39,7 @@ const PushToQueue = async (language: string, submissionInfo: any) => {
 	if (langs[language].compile) {
 		try {
 			await Compile('solution', language, `./local/submissions/${submissionInfo.submission.submissionId}`);
-		} catch(error) {
+		} catch (error) {
 			console.log("Compile error!");
 			console.log(error.stderr);
 
@@ -71,4 +71,15 @@ const GetTaskSubmissionsByUsername = async (taskId: number, userName: string) =>
 	return await Submission.find({ userName: userName, "task.id": taskId });
 }
 
-export { Submit, CreateSubmission, GetSubmission, GetTaskSubmissionsByUsername }; 
+const CheckTaskSolved = async (taskId: number, username: string) => {
+	const anySubmission = await Submission.findOne({ userName: username, "task.id": taskId });
+
+	if (!anySubmission)
+		return null;
+
+	const acceptedSubmission = await Submission.findOne({ userName: username, "task.id": taskId, result: 'Accepted' });
+
+	return acceptedSubmission ? true : false;
+};
+
+export { Submit, CreateSubmission, GetSubmission, GetTaskSubmissionsByUsername, CheckTaskSolved }; 

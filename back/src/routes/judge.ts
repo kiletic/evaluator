@@ -11,7 +11,7 @@ router.post('/api/judge/compile', async (req, res) => {
 	
 	try {
 		await fs.writeFile(path.join(__dirname, '../../local/test/compile/solution.cpp'), req.body.code);	
-	} catch(error) {	
+	} catch (error) {	
 		res.json({ verdict: "Error", stderr: "Failed to create checker file." });
 		console.log(error.sterr);
 
@@ -19,8 +19,8 @@ router.post('/api/judge/compile', async (req, res) => {
 	} 
 
 	try {
-		await Compile('solution', 'c_cpp', './local/test/compile');
-	} catch(error) {
+		await Compile('solution', 'c_cpp', './local/test/compile', true);
+	} catch (error) {
 		res.json({ verdict: "Compile error", stderr: error.stderr })
 
 		return;
@@ -36,7 +36,7 @@ router.post('/api/judge/run', async (req, res) => {
 
 	try {
 		await fs.writeFile(INPUT_PATH, req.body.input);
-	} catch(error) {
+	} catch (error) {
 		res.json({ verdict: "Error", stderr: "Failed to create input file." });
 		
 		return;
@@ -54,7 +54,7 @@ router.post('/api/judge/run', async (req, res) => {
 
 	try {
 		await Compile('solution', req.body.solution.language, './local/test/run/'); 
-	} catch(error) {
+	} catch (error) {
 		res.json({ verdict: "Compile error", stderr: error.stderr })
 
 		return;
@@ -78,7 +78,7 @@ router.post('/api/judge/run', async (req, res) => {
 			}
 			res.json({ verdict: "Error", stderr: verdict });
 		}
-	} catch(error) {
+	} catch (error) {
 		res.json({ verdict: "Error", stderr: "Unexpected error with python testcase checker." })
 
 		return;
