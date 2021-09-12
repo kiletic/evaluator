@@ -10,11 +10,11 @@ const Compile = async (name: string, language: string, cwd: string, isChecker: b
 	}
 };
 
-// timeLimit in seconds 
-// memoryLimit in bytes
-const Run = async (solutionDirectory: string, timeLimit: number, memoryLimit: number, inputPath: string, solutionRunCmd: string, cwd: string) => {
+// timelimit in seconds 
+// memorylimit in bytes
+const Run = async (solutionDirectory: string, timelimit: number, memorylimit: number, inputPath: string, solutionRunCmd: string, cwd: string) => {
 	try {
-		const ret = await exec(`python3 run_tc.py ${solutionDirectory} ${timeLimit} ${memoryLimit} ${inputPath} ${solutionRunCmd}`, { cwd: cwd });
+		const ret = await exec(`python3 run_tc.py ${solutionDirectory} ${timelimit} ${memorylimit} ${inputPath} ${solutionRunCmd}`, { cwd: cwd });
 
 		return {...ret, stdout: JSON.parse(ret.stdout)};
 	} catch (error) {

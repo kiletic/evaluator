@@ -20,8 +20,13 @@
 		height: 500px;
 
 		.submission {
-			border: 1px solid grey;
+			//border: 1px solid grey;
 			margin-bottom: 1px;
+			transition: 0.2s;
+		}
+
+		.submission:hover {
+			background-color: lighten(#290429, 5%);
 		}
 	}
 
@@ -100,6 +105,23 @@
 				background-color: #542954;
 				cursor: pointer;
 			}
+		}
+	}
+
+	h1 {
+		margin-top: 0;
+	}
+
+	.header {
+		display: flex;
+
+		h4 {
+			margin: 0;
+		}
+
+		.time-memory {
+			margin-top: 10px;
+			margin-left: 600px;
 		}
 	}
 }

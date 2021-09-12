@@ -10,7 +10,7 @@ router.get('/api/tasks', async (req: any, res: any) => {
 
 	tasks = await Promise.all(tasks.map(async task => {
 		const solvedStatus: boolean | null = await CheckTaskSolved(task.taskId, req.session.username);
-		console.log(solvedStatus);
+
 		if (solvedStatus === true) {
 			return {...task.toJSON(), solved: true };
 		} else if (solvedStatus === false) {

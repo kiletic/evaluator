@@ -15,7 +15,7 @@ const GetTestcaseResults = async (submissionId: number, testcases: any, taskId: 
 	const ret: Array<any> = [];
 	for (var i = 0; i < testcases.length; i++) {
 		var inp: string = await fs.readFile(path.join(tasksPath, `${taskId}`, 'input', `${i + 1}.in`), { encoding: 'utf-8' });
-		var out: string = await fs.readFile(path.join(submissionsPath, `${submissionId}`, `${testcases[i].output}`), { encoding: 'utf-8' });
+		var out: string = await fs.readFile(path.join(submissionsPath, `${submissionId}`, `${i + 1}.out`), { encoding: 'utf-8' });
 
 		if (inp.length > 100) {
 			inp = inp.substr(0, 100) + '...';
@@ -28,7 +28,9 @@ const GetTestcaseResults = async (submissionId: number, testcases: any, taskId: 
 		ret.push({ 
 			verdict: testcases[i].verdict,
 			input: inp, 
-			output: out 
+			output: out,
+			timeTaken: testcases[i].timeTaken === -1 ? '???' : testcases[i].timeTaken,
+			memoryTaken: testcases[i].memoryTaken === -1 ? '???' : testcases[i].memoryTaken
 		})		
 	}	
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../scss/Problemset.scss'
-import TaskRow from './TaskRow' 
 
 import { BsCheck, BsX } from 'react-icons/bs';
 
@@ -23,14 +22,12 @@ const Problemset = () => {
 					<Link to = {`/problemset/tasks/${task.taskId}`} key = {task.taskId}>
 						<div className = "row">
 							<div className = "task-name">
-								<TaskRow content = {task.name} />
+								{task.name}
 							</div>
 							{task.solved === false &&
-								<BsX color = "red" fontSize = {"30px"} strokeWidth = {1.3} />
-							}
+								<BsX color = "red" fontSize = {"30px"} strokeWidth = {1.3} /> }
 							{task.solved === true &&
-								<BsCheck color = "green" fontSize = {"30px"} strokeWidth = {1.7} />
-							}
+								<BsCheck color = "green" fontSize = {"30px"} strokeWidth = {1.7} /> }
 						</div>
 					</Link>
 				))}

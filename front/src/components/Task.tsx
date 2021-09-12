@@ -13,7 +13,6 @@ const Task = () => {
 
 	const taskPath = "/problemset/tasks/" + id;
 	const submitPath = "/problemset/submit/" + id;
-	const statsPath = "/problemset/stats/" + id;
 
 	useEffect(() => {
 		fetch(`http://localhost:4000/api/tasks/${id}`)
@@ -29,6 +28,7 @@ const Task = () => {
 						data.testcases[i].preOutput = data.testcases[i].output.replace(/\n/g, " <br/> ");	
 					}
 				}
+				console.log(data);
 				setTask(data);
 			});
 
@@ -72,13 +72,18 @@ const Task = () => {
 		<div className = "Task">
 			<div className = "container">
 				<div className = "content">
+				<div className = "header">
 					<div className = "bar">
 						<ol>
 							<NavLink activeClassName = "active" exact to = {taskPath}><li>Task</li></NavLink>
 							<NavLink activeClassName = "active" exact to = {submitPath}><li>Submit</li></NavLink>
-							<NavLink activeClassName = "active" exact to = {statsPath}><li>Stats</li></NavLink>
 						</ol>
 					</div>
+					<div className = "time-memory">
+						<h4 className = "time"> Time limit: {task.timelimit} ms </h4>
+						<h4 className = "memory"> Memory limit: {task.memorylimit} MB </h4>
+					</div>
+				</div>
 						<h1> {task.name} </h1>
 						{Parser(DOMPurify.sanitize(task.text))}
 						<div className = "Input">

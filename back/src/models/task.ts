@@ -5,16 +5,16 @@ const Schema = mongoose.Schema;
 
 const taskSchema = new Schema({
 	name: String,
-	text: String,
+	statement: String,
 	inputText: String,
 	outputText: String,
-	timeLimit: {
+	timelimit: {
 		type: Number,
 		default: 2000 // in ms
 	},
-	memoryLimit: {
+	memorylimit: {
 		type: Number,
-		default: 512 // in MB 
+		default: 256 // in MB 
 	},
 	checker: {
 		type: String,

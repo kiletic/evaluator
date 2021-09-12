@@ -20,6 +20,7 @@ const Submission = () => {
 		let mounted = true;
 
 		const GetSubmission = async () => {
+
 			if (!mounted) return;
 
 			fetch(`http://localhost:4000/api/submission/${id}`)
@@ -51,7 +52,7 @@ const Submission = () => {
 		GetSubmission();
 
 		return () => { mounted = false };
-	}, []);
+	}, [id]);
 
 	return Object.keys(submission).length !== 0 ? (
 		<div className = "Submission">
@@ -66,7 +67,7 @@ const Submission = () => {
 				 <div className = "cell"> <h3> Language </h3> </div>
 				</div>
 				<div className = "row">
-				 <div className = "lower cell"> {submission.userName} </div>
+				 <div className = "lower cell"> {submission.username} </div>
 				 <div className = "lower cell"> <NavLink to = {`/problemset/tasks/${submission.task.id}`}> {submission.task.name} </NavLink> </div>
 				 <div className = {submission.result.length < 14 ? 'lower cell' : 'cell'}> {submission.result} </div>
 				 <div className = "lower cell"> {submission.timeTaken === -1 ? '???' : submission.timeTaken} ms </div>
@@ -83,9 +84,9 @@ const Submission = () => {
 			<h2>Testcase results</h2>
 			{submission.testcaseResults.map((testcase: any, index: number) => (
 				<div className = 'tc' key={index}>
-					<h3>{`Testcase #${index + 1} ${testcase.verdict}`}</h3>
+					<h3>{`Testcase #${index + 1} ${testcase.verdict} ${testcase.timeTaken} ms ${testcase.memoryTaken} KB`}</h3>
 					<div>
-						<h4>Input</h4>
+						<h4>Input</h4> 
 						<pre>{`${testcase.input}`}</pre>
 					</div>
 					<div>

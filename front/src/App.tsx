@@ -47,7 +47,6 @@ function App() {
 								<Redirect exact from = "/login" to = "/problemset"/>
 								<Route path = "/problemset/tasks/:id" component = {Task} />
 								<Route path = "/problemset/submit/:id" component = {Submit} />
-								<Route path = "/problemset/stats/:id" />
 								<Route path = "/submission/:id" component = {Submission} />
 								<Route path = "/add-task" component = {AddTask}/>
 								<Route exact path = "/problemset" component = {Problemset} />

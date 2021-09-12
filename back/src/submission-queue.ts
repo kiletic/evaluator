@@ -30,8 +30,8 @@ class Worker {
 	async assign(submissionInfo: any) {
 		this.submission = submissionInfo.submission;
 		this.submissionPath = path.join(__dirname, `../local/submissions/${this.submission.submissionId}`);
-		this.taskInfo.timeLimit = submissionInfo.timeLimit;
-		this.taskInfo.memoryLimit = submissionInfo.memoryLimit;
+		this.taskInfo.timelimit = submissionInfo.timelimit;
+		this.taskInfo.memorylimit = submissionInfo.memorylimit;
 		this.taskInfo.path = path.join(__dirname, '..', 'local', 'tasks', `${submissionInfo.taskId}`);
 		this.taskInfo.inputs = await fs.readdir(path.join(this.taskInfo.path, 'input'));
 		this.runCmd = submissionInfo.run;
@@ -51,7 +51,6 @@ class Worker {
 
 	async run_testcase(tcNum: number, iteration: number = 0) {
 		if (tcNum === this.taskInfo.inputs.length) {
-			// THE END -> ACCEPTED!
 			this.submission.result = 'Accepted';
 			this.finish_work();
 
@@ -65,18 +64,27 @@ class Worker {
 
 		try {
 			const { stdout } = await Run(this.submissionPath, 
-																	 this.taskInfo.timeLimit / 1000, 
-																	 this.taskInfo.memoryLimit * 1024 * 1024,
+																	 this.taskInfo.timelimit / 1000, 
+																	 this.taskInfo.memorylimit * 1024 * 1024,
 																	 INPUT_PATH,
 																	 this.runCmd,
 																	 './src/lib/run');
 
 
 			// update only if less than timelimit (because of re-runs)
-			if (stdout.time * 1000 < this.taskInfo.timeLimit)
+			if (stdout.time * 1000 < this.taskInfo.timelimit)
 				this.time = Math.max(this.time, Math.floor(stdout.time * 1000));
 			this.memory = Math.max(this.memory, Math.floor(stdout.memory));
-			
+
+			// add testcase if its not re-run
+			if (this.submission.testcaseResults.length <= tcNum) {
+				this.submission.testcaseResults.push({ 
+					verdict: 'Pending', 
+					timeTaken: Math.floor(stdout.time * 1000),
+					memoryTaken: Math.floor(stdout.memory)
+				});
+			}
+
 			// save output
 			await fs.writeFile(path.join(this.submissionPath, `${tcNum + 1}.out`), stdout.output);
 
@@ -87,7 +95,6 @@ class Worker {
 				let verdict: string;
 				 if (stdout.verdict === 'tle close' && iteration < 2) {
 					this.run_testcase(tcNum, iteration + 1);
-
 					return;
 				} else if (stdout.verdict === 'rte') {
 					verdict = 'Runtime Error';
@@ -100,12 +107,21 @@ class Worker {
 				}
 
 				this.submission.result = `${verdict} on testcase ${tcNum + 1}`;
-				this.submission.memoryTaken = (verdict === 'Memory Limit Exceeded' ? -1 : this.memory);
-				this.submission.timeTaken = (verdict === 'Time Limit Exceeded' ? -1 : this.time);
-				this.submission.testcaseResults.push({
-					verdict: verdict,
-					output: `${tcNum + 1}.out` 
-				});
+				this.submission.testcaseResults[tcNum].verdict = verdict;
+
+				if (verdict === 'Memory Limit Exceeded') {
+					this.submission.memoryTaken = -1;
+					this.submission.testcaseResults[tcNum].memoryTaken = -1;
+				} else {
+					this.submission.memoryTaken = this.memory;
+				}
+
+				if (verdict === 'Time Limit Exceeded') {
+					this.submission.timeTaken = -1;
+					this.submission.testcaseResults[tcNum].timeTaken = -1;
+				} else {
+					this.submission.timeTaken = this.time;
+				}
 
 				this.finish_work();
 			}
@@ -137,18 +153,11 @@ class Worker {
 
 			if (stdout === 'Wrong answer') {
 				this.submission.result = `Wrong Answer on testcase ${tcNum + 1}`;
-				this.submission.testcaseResults.push({
-					verdict: 'Wrong Answer',
-					output: `${tcNum + 1}.out`
-				});
+				this.submission.testcaseResults[tcNum].verdict = 'Wrong Answer';
 	
 				this.finish_work();
 			} else {
-				this.submission.result = `Accepted`;
-				this.submission.testcaseResults.push({
-					verdict: 'Accepted',
-					output: `${tcNum + 1}.out`
-				});
+				this.submission.testcaseResults[tcNum].verdict = 'Accepted';
 				// Go to next testcase
 				this.run_testcase(tcNum + 1);
 			}

@@ -19,7 +19,6 @@ const Submit = () => {
 
 	const taskPath = "/problemset/tasks/" + id;
 	const submitPath = "/problemset/submit/" + id;
-	const statsPath = "/problemset/stats/" + id;
 
 	const submitCode = async () => {
 		fetch(`http://localhost:4000/api/submit/${id}`, { 
@@ -42,7 +41,6 @@ const Submit = () => {
 					<ol>
 						<NavLink activeClassName = "active" exact to = {taskPath}><li>Task</li></NavLink>
 						<NavLink activeClassName = "active" exact to = {submitPath}><li>Submit</li></NavLink>
-						<NavLink activeClassName = "active" exact to = {statsPath}><li>Stats</li></NavLink>
 					</ol>
 				</div>
 				<h1> Submit </h1>

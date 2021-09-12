@@ -43,10 +43,6 @@ const onLogin = async (req: any, res: any) => {
 	res.status(403).json({ message: "Invalid username." });
 }
 
-const onLogout = async (req: any, res: any) => {
-	req.session.destroy();
-}
-
 const checkAuth = async (req: any, res: any) => {
 	if (req.session.isAuth) {
 		res.status(200).json({ isAuth: true });
@@ -55,4 +51,4 @@ const checkAuth = async (req: any, res: any) => {
 	}
 }
 
-export { onLogin, onRegister, onLogout, checkAuth };
+export { onLogin, onRegister, checkAuth };

@@ -10,7 +10,7 @@ import { GetTask } from '../controllers/tasks';
 
 const CreateSubmission = async (req: any, task: any) => {
 	const submission: any = new Submission({
-		userName: req.session.username,
+		username: req.session.username,
 		code: {
 			content: req.body.code,
 			language: req.body.language 
@@ -56,7 +56,7 @@ const Submit = async (req: any) => {
 	const task: any = await GetTask(req.params.id);
 	const submission: any = await CreateSubmission(req, task);
 
-	PushToQueue(req.body.language, { submission: submission, timeLimit: task.timeLimit, memoryLimit: task.memoryLimit, taskId: task.taskId });
+	PushToQueue(req.body.language, { submission: submission, timelimit: task.timelimit, memorylimit: task.memorylimit, taskId: task.taskId });
 
 	return submission.submissionId;
 };
@@ -67,17 +67,20 @@ const GetSubmission = async (id: number) => {
 	return submission;
 };
 
-const GetTaskSubmissionsByUsername = async (taskId: number, userName: string) => {
-	return await Submission.find({ userName: userName, "task.id": taskId });
+const GetTaskSubmissionsByUsername = async (taskId: number, username: string) => {
+	return await Submission.find({ username: username, "task.id": taskId });
 }
 
+// null -> no submissions for that task
+// false -> didnt get accepted
+// true -> accepted
 const CheckTaskSolved = async (taskId: number, username: string) => {
-	const anySubmission = await Submission.findOne({ userName: username, "task.id": taskId });
+	const anySubmission = await Submission.findOne({ username: username, "task.id": taskId });
 
 	if (!anySubmission)
 		return null;
 
-	const acceptedSubmission = await Submission.findOne({ userName: username, "task.id": taskId, result: 'Accepted' });
+	const acceptedSubmission = await Submission.findOne({ username: username, "task.id": taskId, result: 'Accepted' });
 
 	return acceptedSubmission ? true : false;
 };

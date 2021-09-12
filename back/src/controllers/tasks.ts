@@ -32,11 +32,11 @@ const SaveTask = async (task: any) => {
 
 	const newTask = new Task({
 		name: task.name,
-		text: task.statement,
+		statement: task.statement,
 		inputText: task.input,
 		outputText: task.output,
-		timeLimit: parseInt(task.timelimit),
-		memoryLimit: parseInt(task.memorylimit),
+		timelimit: parseInt(task.timelimit),
+		memorylimit: parseInt(task.memorylimit),
 		testcases: testcases
 	});
 	await newTask.save();

@@ -4,14 +4,14 @@ import { AutoIncrement } from '../app';
 const Schema = mongoose.Schema;
 
 const submissionSchema = new Schema({
-	userName: String,
+	username: String,
 	task: {
-		name: { type: String },
-		id: { type: Number }
+		name: String,
+		id: Number
 	},
 	code: {
-		content: { type: String },
-		language: { type: String }
+		content: String,
+		language: String
 	},
 	result: {
 		type: String,
@@ -28,11 +28,11 @@ const submissionSchema = new Schema({
 	testcaseResults: [{
 		verdict: {
 			type: String,
-			enum: ['Pending', 'Accepted', 'Compile Error', 'Wrong Answer', 'Runtime Error', 'Time Limit Exceeded', 'Memory Limit Exceeded', 'Unknown', '???'],
+			enum: ['Pending', 'Accepted', 'Compile Error', 'Wrong Answer', 'Runtime Error', 'Time Limit Exceeded', 'Memory Limit Exceeded', 'Unknown'],
 			default: 'Pending'
-		}, 
-		output: { type: String },
-		msg: { type: String }
+		},
+		timeTaken: Number,
+		memoryTaken: Number
 	}]
 });
 
