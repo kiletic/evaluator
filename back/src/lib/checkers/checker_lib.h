@@ -96,7 +96,7 @@ int _get_int(std::istringstream& stream, bool need_end = false) {
 	return _stoi(s);
 }
 
-int _get_ll(std::istringstream& stream, bool need_end = false) {
+long long _get_ll(std::istringstream& stream, bool need_end = false) {
 	std::string s = _get_string(stream);
 
 	if (need_end)
