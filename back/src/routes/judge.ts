@@ -12,7 +12,7 @@ router.post('/api/judge/compile', async (req, res) => {
 	try {
 		await fs.writeFile(path.join(__dirname, '../../local/test/compile/solution.cpp'), req.body.code);	
 	} catch (error) {	
-		res.json({ verdict: "Error", stderr: "Failed to create checker file." });
+		res.json({ result: "Error", stderr: "Failed to create checker file." });
 		console.log(error.sterr);
 
 		return;
@@ -21,12 +21,12 @@ router.post('/api/judge/compile', async (req, res) => {
 	try {
 		await Compile('solution', 'c_cpp', './local/test/compile', true);
 	} catch (error) {
-		res.json({ verdict: "Compile error", stderr: error.stderr })
+		res.json({ result: "Compile error", stderr: error.stderr })
 
 		return;
 	}
 
-	res.json({ verdict: 'Compiled successfully', stderr: "" });
+	res.json({ result: 'Compiled successfully', stderr: "" });
 });
 
 router.post('/api/judge/run', async (req, res) => {
@@ -37,7 +37,7 @@ router.post('/api/judge/run', async (req, res) => {
 	try {
 		await fs.writeFile(INPUT_PATH, req.body.input);
 	} catch (error) {
-		res.json({ verdict: "Error", stderr: "Failed to create input file." });
+		res.json({ result: "Error", stderr: "Failed to create input file." });
 		
 		return;
 	}
@@ -47,7 +47,7 @@ router.post('/api/judge/run', async (req, res) => {
 	try {
 		await fs.writeFile(path.join(SOL_DIR, 'solution' + langs[req.body.solution.language].ext), req.body.solution.code);
 	} catch (error) {
-		res.json({ verdict: "Error", stderr: "Failed to create solution file." });
+		res.json({ result: "Error", stderr: "Failed to create solution file." });
 		
 		return;
 	}
@@ -55,7 +55,7 @@ router.post('/api/judge/run', async (req, res) => {
 	try {
 		await Compile('solution', req.body.solution.language, './local/test/run/'); 
 	} catch (error) {
-		res.json({ verdict: "Compile error", stderr: error.stderr })
+		res.json({ result: "Compile error", stderr: error.stderr })
 
 		return;
 	}
@@ -63,23 +63,23 @@ router.post('/api/judge/run', async (req, res) => {
 	try {
 		const { stdout } = await Run(SOL_DIR, parseInt(req.body.timelimit) / 1000, parseInt(req.body.memorylimit) * 1024 * 1024, INPUT_PATH, langs[req.body.solution.language].run('solution'), './src/lib/run/');
 
-		if (stdout.verdict === 'okay') {
-			res.json({ verdict: "okay", stderr: stdout.output });
+		if (stdout.result === 'okay') {
+			res.json({ result: "okay", stderr: stdout.output });
 		} else {
-			let verdict: string;
-			if (stdout.verdict === 'tle') {
-				verdict = 'Time Limit Exceeded';
-			} else if (stdout.verdict === 'rte') {
-				verdict = 'Runtime Error';
-			} else if (stdout.verdict === 'mle') {
-				verdict = 'Memory Limit Exceeded';
+			let result: string;
+			if (stdout.result === 'tle') {
+				result = 'Time Limit Exceeded';
+			} else if (stdout.result === 'rte') {
+				result = 'Runtime Error';
+			} else if (stdout.result === 'mle') {
+				result = 'Memory Limit Exceeded';
 			} else {
-				verdict = 'Unknown';
+				result = 'Unknown';
 			}
-			res.json({ verdict: "Error", stderr: verdict });
+			res.json({ result: "Error", stderr: result });
 		}
 	} catch (error) {
-		res.json({ verdict: "Error", stderr: "Unexpected error with python testcase checker." })
+		res.json({ result: "Error", stderr: "Unexpected error with python testcase checker." })
 
 		return;
 	}

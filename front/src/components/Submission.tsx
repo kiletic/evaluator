@@ -84,7 +84,7 @@ const Submission = () => {
 			<h2>Testcase results</h2>
 			{submission.testcaseResults.map((testcase: any, index: number) => (
 				<div className = 'tc' key={index}>
-					<h3>{`Testcase #${index + 1} ${testcase.verdict} ${testcase.timeTaken} ms ${testcase.memoryTaken} KB`}</h3>
+					<h3>{`Testcase #${index + 1} ${testcase.result} ${testcase.timeTaken} ms ${testcase.memoryTaken} KB`}</h3>
 					<div>
 						<h4>Input</h4> 
 						<pre>{`${testcase.input}`}</pre>

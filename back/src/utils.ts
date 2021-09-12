@@ -26,7 +26,7 @@ const GetTestcaseResults = async (submissionId: number, testcases: any, taskId: 
 		}
 
 		ret.push({ 
-			verdict: testcases[i].verdict,
+			result: testcases[i].result,
 			input: inp, 
 			output: out,
 			timeTaken: testcases[i].timeTaken === -1 ? '???' : testcases[i].timeTaken,
@@ -40,8 +40,6 @@ const GetTestcaseResults = async (submissionId: number, testcases: any, taskId: 
 const SaveTaskIO = async (taskId: number, testcases: Array<any>) => {
 	const taskPath: string = path.join(tasksPath, `${taskId}`);	
 
-	console.log("HERE");
-
 	await fs.mkdir(path.join(taskPath, 'input'));
 	await fs.mkdir(path.join(taskPath, 'output'));
 
@@ -53,9 +51,12 @@ const SaveTaskIO = async (taskId: number, testcases: Array<any>) => {
 
 const SaveAndCompileChecker = async (taskId: number, code: string) => {
 	const taskPath: string = path.join(tasksPath, `${taskId}`);
-	await fs.writeFile(path.join(taskPath, 'checker.cpp'), code);		
+	await fs.writeFile(path.join(taskPath, 'checker.cpp'), code);	
 
-	const { error, stderr } = await exec(langs['c_cpp'].compile('checker') + ' -I /lib/checkers/', { cwd: taskPath });					
+	const checkersPath: string = path.join(taskPath, '..', '..', '..', 'src', 'lib', 'checkers');
+	console.log(checkersPath);
+
+	const { error, stderr } = await exec(langs['c_cpp'].compile('checker') + ` -I ${checkersPath}`, { cwd: taskPath });					
 
 	if (error) {
 		return stderr;

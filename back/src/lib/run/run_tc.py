@@ -28,22 +28,22 @@ msg['output'] = out
 
 if p.returncode == 0:
     if timelimit - usage.ru_utime >= 0.01:
-        msg['verdict'] = 'okay'
+        msg['result'] = 'okay'
     elif usage.ru_utime <= 1.25 * timelimit:
-        msg['verdict'] = 'tle close'
+        msg['result'] = 'tle close'
     else:
-        msg['verdict'] = 'tle'
+        msg['result'] = 'tle'
 elif usage.ru_utime - timelimit > 0.01:
-    msg['verdict'] = 'tle'
+    msg['result'] = 'tle'
 elif p.returncode == 134:
-    msg['verdict'] = 'mle'
+    msg['result'] = 'mle'
 elif p.returncode == 139:
     if 'core dumped' not in err:
-        msg['verdict'] = 'mle'
+        msg['result'] = 'mle'
     else:
-        msg['verdict'] = 'rte'
+        msg['result'] = 'rte'
 else:
-    msg['verdict'] = 'rte'
+    msg['result'] = 'rte'
 
 msg['err'] = err
 msg['returncode'] = p.returncode

@@ -26,7 +26,7 @@ const submissionSchema = new Schema({
 		default: 0 // in KB 
 	},
 	testcaseResults: [{
-		verdict: {
+		result: {
 			type: String,
 			enum: ['Pending', 'Accepted', 'Compile Error', 'Wrong Answer', 'Runtime Error', 'Time Limit Exceeded', 'Memory Limit Exceeded', 'Unknown'],
 			default: 'Pending'

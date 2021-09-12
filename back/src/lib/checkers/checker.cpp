@@ -22,23 +22,18 @@ bool lines_equal(std::string& uline, std::string& sline) {
 }
 
 int main(int argc, char** argv) {
-	init_checker(argc, argv);
+	_init_checker(argc, argv);
 
 	std::string uline, sline;
-	while (std::getline(uout, uline) && std::getline(sout, sline)) {
+	while (std::getline(_uout, uline) && std::getline(_sout, sline)) {
 		if (!lines_equal(uline, sline)) {
-			// RETURN WA
-			std::cout << "Wrong answer";
-			return 0;
+			_WA();
 		}
 	}
 
-	if (std::getline(uout, uline) || std::getline(sout, sline)) {
-		// RETURN WA
-		std::cout << "Wrong answer";
-		return 0;
+	if (std::getline(_uout, uline) || std::getline(_sout, sline)) {
+		_WA();
 	}
 
-	// RETURN AC
-	std::cout << "Accepted";
+	_AC();
 }

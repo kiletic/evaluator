@@ -79,7 +79,7 @@ class Worker {
 			// add testcase if its not re-run
 			if (this.submission.testcaseResults.length <= tcNum) {
 				this.submission.testcaseResults.push({ 
-					verdict: 'Pending', 
+					result: 'Pending', 
 					timeTaken: Math.floor(stdout.time * 1000),
 					memoryTaken: Math.floor(stdout.memory)
 				});
@@ -88,35 +88,35 @@ class Worker {
 			// save output
 			await fs.writeFile(path.join(this.submissionPath, `${tcNum + 1}.out`), stdout.output);
 
-			if (stdout.verdict === 'okay') {
+			if (stdout.result === 'okay') {
 				// SEND TO CHECKER
 				this.check_output(tcNum);	
 			} else {
-				let verdict: string;
-				 if (stdout.verdict === 'tle close' && iteration < 2) {
+				let result: string;
+				 if (stdout.result === 'tle close' && iteration < 2) {
 					this.run_testcase(tcNum, iteration + 1);
 					return;
-				} else if (stdout.verdict === 'rte') {
-					verdict = 'Runtime Error';
-				} else if (stdout.verdict === 'mle') {
-					verdict = 'Memory Limit Exceeded';
-				} else if (stdout.verdict === 'tle' || stdout.verdict === 'tle close') {
-					verdict = 'Time Limit Exceeded';
+				} else if (stdout.result === 'rte') {
+					result = 'Runtime Error';
+				} else if (stdout.result === 'mle') {
+					result = 'Memory Limit Exceeded';
+				} else if (stdout.result === 'tle' || stdout.result === 'tle close') {
+					result = 'Time Limit Exceeded';
 				} else {
-					verdict = 'Unknown';
+					result = 'Unknown';
 				}
 
-				this.submission.result = `${verdict} on testcase ${tcNum + 1}`;
-				this.submission.testcaseResults[tcNum].verdict = verdict;
+				this.submission.result = `${result} on testcase ${tcNum + 1}`;
+				this.submission.testcaseResults[tcNum].result = result;
 
-				if (verdict === 'Memory Limit Exceeded') {
+				if (result === 'Memory Limit Exceeded') {
 					this.submission.memoryTaken = -1;
 					this.submission.testcaseResults[tcNum].memoryTaken = -1;
 				} else {
 					this.submission.memoryTaken = this.memory;
 				}
 
-				if (verdict === 'Time Limit Exceeded') {
+				if (result === 'Time Limit Exceeded') {
 					this.submission.timeTaken = -1;
 					this.submission.testcaseResults[tcNum].timeTaken = -1;
 				} else {
@@ -140,7 +140,9 @@ class Worker {
 
 		const cmd = './checker' + ' ' + inputFilePath + ' ' + userOutputFilePath + ' ' + correctOutputFilePath; 
 
-		exec(cmd, { cwd: './src/lib/checkers' }, (error, stdout, stderr) => {
+		console.log(this.checkerPath);
+
+		exec(cmd, { cwd: this.checkerPath }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling checker.");
 				console.log(stderr);
@@ -153,11 +155,11 @@ class Worker {
 
 			if (stdout === 'Wrong answer') {
 				this.submission.result = `Wrong Answer on testcase ${tcNum + 1}`;
-				this.submission.testcaseResults[tcNum].verdict = 'Wrong Answer';
+				this.submission.testcaseResults[tcNum].result = 'Wrong Answer';
 	
 				this.finish_work();
 			} else {
-				this.submission.testcaseResults[tcNum].verdict = 'Accepted';
+				this.submission.testcaseResults[tcNum].result = 'Accepted';
 				// Go to next testcase
 				this.run_testcase(tcNum + 1);
 			}

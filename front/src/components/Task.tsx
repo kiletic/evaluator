@@ -19,7 +19,7 @@ const Task = () => {
 			.then(res => res.json())
 			.then(data => {
 				// TODO: fix strings that contain invalid html tags
-				data.text = data.text.replace(/\n/g, " <br/> ");
+				data.statement = data.statement.replace(/\n/g, " <br/> ");
 				data.inputText = data.inputText.replace(/\n/g, " <br/> ");
 				data.outputText = data.outputText.replace(/\n/g, "<br/>");
 				if (data.testcases) {
@@ -85,7 +85,7 @@ const Task = () => {
 					</div>
 				</div>
 						<h1> {task.name} </h1>
-						{Parser(DOMPurify.sanitize(task.text))}
+						{Parser(DOMPurify.sanitize(task.statement))}
 						<div className = "Input">
 							<h3> Input </h3>
 							{Parser(DOMPurify.sanitize(task.inputText))}

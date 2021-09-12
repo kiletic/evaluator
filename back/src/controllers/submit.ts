@@ -34,7 +34,7 @@ const CreateSubmission = async (req: any, task: any) => {
 const PushToQueue = async (language: string, submissionInfo: any) => {
 	const checkerPath: string = submissionInfo.checker === 'default'
 		? path.join(__dirname, '../lib/checkers/')
-		: path.join(__dirname, `../../local/submissionInfos/${submissionInfo.taskId}`);
+		: path.join(__dirname, `../../local/tasks/${submissionInfo.taskId}`);
 
 	if (langs[language].compile) {
 		try {

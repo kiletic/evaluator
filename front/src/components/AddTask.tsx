@@ -56,10 +56,10 @@ const AddTask = () => {
 		}).then(res => res.json())
 			.then(data => {
 				console.log(data);	
-				if (data.verdict !== 'Compiled successfully') {
+				if (data.result !== 'Compiled successfully') {
 					setTask({...task, checker: {...task.checker, compilationMessage: 'Compile Error!\n' + data.stderr}});	
 				} else {
-					setTask({...task, checker: {...task.checker, isCompiled: true, compilationMessage: data.verdict}});	
+					setTask({...task, checker: {...task.checker, isCompiled: true, compilationMessage: data.result}});	
 				}
 			});
 	};
@@ -73,10 +73,10 @@ const AddTask = () => {
 			body: JSON.stringify({ solution: task.solution, input: task.testcases[tcNum].input, timelimit: task.timelimit, memorylimit: task.memorylimit })
 		}).then(res => res.json())
 			.then(data => {
-				if (data.verdict === 'okay') {
+				if (data.result === 'okay') {
 					changeTestcase('output', data.stderr, tcNum);
 				} else {
-					changeTestcase('output', data.verdict + '\n' + data.stderr, tcNum);
+					changeTestcase('output', data.result + '\n' + data.stderr, tcNum);
 				}
 			});
 	};
