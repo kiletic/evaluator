@@ -28,8 +28,9 @@ const Task = () => {
 						data.testcases[i].preOutput = data.testcases[i].output.replace(/\n/g, " <br/> ");	
 					}
 				}
-				console.log(data);
 				setTask(data);
+				if (MathJax)
+					MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 			});
 
 		fetch(`http://localhost:4000/api/submissions/${id}/user`)
@@ -62,11 +63,8 @@ const Task = () => {
 				}
 				return {...submission, result: result};
 			})));
-	}, [id]);
 
-	useEffect(() => {
-		MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-	}, [task]);
+	}, [id]);
 
 	return Object.keys(task).length !== 0 ? (
 		<div className = "Task">
