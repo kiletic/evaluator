@@ -24,11 +24,12 @@ app.use(Cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../../front/build")));
 app.use(session({
-	secret: 'moj sekret',
+	secret: 'some random secret i guess',
 	resave: false,
 	saveUninitialized: true, 
 	store: MongoStore.create({
-		mongoUrl: dbURI
+		mongoUrl: dbURI,
+		ttl: 2 * 24 * 60 * 60 // 2 days
 	})
 }));
 

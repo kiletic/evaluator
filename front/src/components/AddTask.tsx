@@ -17,7 +17,17 @@ const AddTask = () => {
 		timelimit: "2000",
 		memorylimit: "512",
 		checker: {
-			code: "",
+			code: 
+`#include "checker_lib.h"
+
+int main(int argc, char** argv) {
+	_init_checker(argc, argv);
+
+	// _in -> input stream for input file
+	// _uout -> input stream for user output
+	// _sout -> input stream for model solution output
+
+}`,
 			isCompiled: false,
 			compilationMessage: ""
 		},
