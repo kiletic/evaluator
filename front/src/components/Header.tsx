@@ -26,7 +26,6 @@ const Header = () => {
 				<nav>
 					<ul>
 						<NavLink activeClassName = "active" to = "/problemset"><li>Problemset</li></NavLink>
-						<NavLink activeClassName = "active" to = "/profile"><li>Profile</li></NavLink>
 						<NavLink activeClassName = "active" exact to = "/login" onClick = {() => onClick() }><li>Logout</li></NavLink>
 					</ul>
 				</nav>

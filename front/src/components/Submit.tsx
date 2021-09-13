@@ -16,6 +16,8 @@ const Submit = () => {
 
 	const [language, setLanguage] = useState("c_cpp");
 	const [code, setCode] = useState("");
+	const [input, setInput] = useState("");
+	const [output, setOutput] = useState("");
 
 	const taskPath = "/problemset/tasks/" + id;
 	const submitPath = "/problemset/submit/" + id;
@@ -31,6 +33,26 @@ const Submit = () => {
 			.then(data => {
 				console.log(data);
 				history.push(`/submission/${data.submissionId}`);
+			});
+	};
+
+	const runCode = async () => {
+		const data = await fetch(`http://localhost:4000/api/tasks/${id}`, { method: "GET" });	
+		const task = await data.json();
+
+		fetch('http://localhost:4000/api/judge/run', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ solution: { code: code, language: language }, input: input, timelimit: task.timelimit, memorylimit: task.memorylimit })
+		}).then(res => res.json())
+			.then(data => {
+				if (data.result === 'okay') {
+					setOutput(data.stderr);
+				} else {
+					setOutput(data.result + '\n' + data.stderr);
+				}
 			});
 	};
 	
@@ -54,11 +76,11 @@ const Submit = () => {
 					<AceEditor mode = {language} theme = "cobalt" width = "600px" onChange = {(newCode) => setCode(newCode)}/>
 					<div className = "inout-box">
 						<p> Input: </p>
-						<textarea rows = {8} cols = {25}>
+						<textarea rows = {8} cols = {25} onChange = {(e) => setInput(e.target.value)}>
 						</textarea>
-						<p> <button> Run code </button> </p>
+						<p> <button onClick = {() => runCode()}> Run code </button> </p>
 						<p> Output: </p>
-						<textarea readOnly rows = {8} cols = {25}>
+						<textarea readOnly rows = {8} cols = {25} value = {output}>
 						</textarea>
 					</div>
 				</div>

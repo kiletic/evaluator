@@ -21,9 +21,10 @@
 	}
 
 	.box input[type = "text"], .box input[type = "password"] {
+		border: none;
+		border-bottom: 1px solid grey;
 		outline: none;
 		padding: 10px 40px;
-		border-radius: 10px;
 	}
 
 	.box input[type = "submit"] {

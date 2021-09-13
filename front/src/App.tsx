@@ -17,6 +17,7 @@ function App() {
 	const [checkForAuth, setCheckForAuth] = useState(true);
 
 	useEffect(() => {
+		return;
 		fetch('http://localhost:4000/api/check-auth', { 
 			method: "GET",
 		}).then(res => res.json())

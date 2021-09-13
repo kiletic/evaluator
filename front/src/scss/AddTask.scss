@@ -1,3 +1,57 @@
 .AddTask {
+	margin-left: 450px;
+	margin-top: 20px;
 	color: white;
+
+	textarea {
+		color: white;	
+		background-color: inherit;
+		font-size: 16px;
+	}
+
+	input[type = "text"] {
+		outline: none;
+		border: none;
+		border-bottom: 1px solid grey;
+		background-color: inherit;
+		color: white;
+		font-size: 17px;
+		min-width: 300px;
+	}
+
+	.duo {
+		display: flex;
+	}
+
+	.entry {
+		margin-bottom: 40px;
+
+		.task-input { margin-left: 400px; }
+		.timelimit-input { margin-left: 290px; }
+		.memorylimit-input { margin-left: 265px; }
+		.statement-box { margin-left: 400px; min-width: 400px; min-height: 200px; };
+		.input-box { margin-left: 447px; min-width: 400px; min-height: 130px; };
+		.output-box { margin-left: 435px; min-width: 400px; min-height: 130px; };
+		.checker-select { margin-left: 420px; }
+		.editor { margin-left: 50px; margin-top: 20px; }
+		.compile-button { margin-left: 100px; height: 50px; margin-top: 40px; width: 100px; }
+		.checker-msg { margin-left: 75px; margin-top: 20px; min-width: 530px; min-height: 150px; }
+		.lang-picker { margin-left: 50px; font-size: 17px; }
+	}
+
+	.testcase { 
+		margin-bottom: 10px;
+
+		.btn { margin-left: 20px; }
+		.in-box { margin-left: 200px; min-width: 400px; min-height: 150px;  }
+		.out-box { margin-left: 188px; min-width: 400px; min-height: 150px;  }
+		.out-btn { height: 50px; margin-top: 50px; margin-left: 10px; }
+		.note-box { margin-left: 212px; min-width: 400px; min-height: 150px;  }
+		.row { margin-top: 15px; }
+
+		input[type = "checkbox"] { margin-left: 185px; }
+	}
+
+	.add-btn { margin-left: 300px; height: 30px; }
+	.save-btn { margin-left: 280px; height: 50px; margin-bottom: 30px; margin-top: 20px; width: 150px; }
 }

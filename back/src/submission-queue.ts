@@ -67,9 +67,7 @@ class Worker {
 																	 this.taskInfo.timelimit / 1000, 
 																	 this.taskInfo.memorylimit * 1024 * 1024,
 																	 INPUT_PATH,
-																	 this.runCmd,
-																	 './src/lib/run');
-
+																	 this.runCmd);
 
 			// update only if less than timelimit (because of re-runs)
 			if (stdout.time * 1000 < this.taskInfo.timelimit)
@@ -140,8 +138,6 @@ class Worker {
 
 		const cmd = './checker' + ' ' + inputFilePath + ' ' + userOutputFilePath + ' ' + correctOutputFilePath; 
 
-		console.log(this.checkerPath);
-
 		exec(cmd, { cwd: this.checkerPath }, (error, stdout, stderr) => {
 			if (error) {
 				console.log("Unexpected error when calling checker.");
@@ -150,10 +146,12 @@ class Worker {
 				return;
 			}	
 
+			console.log(stdout);
+
 			this.submission.memoryTaken = this.memory;
 			this.submission.timeTaken = this.time; 
 
-			if (stdout === 'Wrong answer') {
+			if (stdout === 'Wrong Answer') {
 				this.submission.result = `Wrong Answer on testcase ${tcNum + 1}`;
 				this.submission.testcaseResults[tcNum].result = 'Wrong Answer';
 	

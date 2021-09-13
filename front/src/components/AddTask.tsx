@@ -98,97 +98,99 @@ const AddTask = () => {
 
 	return (
 		<div className = "AddTask">
-			<div>
+			<div className = "entry">
 				Task name
-				<input type = "text" onChange = {e => { setTask({...task, name: e.target.value}); }} value = {task.name} />
+				<input className = "task-input" type = "text" onChange = {e => { setTask({...task, name: e.target.value}); }} value = {task.name} />
 			</div>
 			
-			<div>
+			<div className = "entry">
 				Time limit (in ms)
-				<input type = "text" onChange = {e => { setTask({...task, timelimit: e.target.value}); }} value = {task.timelimit} />
+				<input className = "timelimit-input" type = "text" onChange = {e => { setTask({...task, timelimit: e.target.value}); }} value = {task.timelimit} />
 			</div>
 
-			<div>
+			<div className = "entry">
 				Memory limit (in MB)
-				<input type = "text" onChange = {e => { setTask({...task, memorylimit: e.target.value}); }} value = {task.memorylimit} />
+				<input className = "memorylimit-input" type = "text" onChange = {e => { setTask({...task, memorylimit: e.target.value}); }} value = {task.memorylimit} />
 			</div>
 
-			<div>
-				Statement
-				<textarea onChange = {e => { setTask({...task, statement: e.target.value}); }} />
+			<div className = "entry duo">
+				<div> Statement </div> 
+				<textarea className = "statement-box" onChange = {e => { setTask({...task, statement: e.target.value}); }} />
 			</div>
 
-			<div>
-				Input	
-				<textarea onChange = {e => { setTask({...task, input: e.target.value}); }} />
+			<div className = "entry duo">
+				<div> Input </div>	
+				<textarea className = "input-box" onChange = {e => { setTask({...task, input: e.target.value}); }} />
 			</div>
 
-			<div>
-				Output	
-				<textarea onChange = {e => { setTask({...task, output: e.target.value}); }} />
+			<div className = "entry duo">
+				<div> Output </div>	
+				<textarea className = "output-box" onChange = {e => { setTask({...task, output: e.target.value}); }} />
 			</div>
 
-		<div>
+		<div className = "entry">
 			Checker	
-			<select onChange = {e => { setCustom(e.target.value === 'custom') }}>
+			<select className = "checker-select" onChange = {e => { setCustom(e.target.value === 'custom') }}>
 				<option value = "default"> default (line by line, ignore whitespaces) </option>
 				<option value = "custom"> custom </option>
 			</select>
 
 				{custom &&  
 				<>
-					<AceEditor mode = "c_cpp" theme = "cobalt" width = "600px" onChange = {newCode => setTask({...task, checker: {code: newCode, isCompiled: false, compilationMessage: ""}}) } value = {task.checker.code} />
-					<button onClick = {() => requestCompilation()}> Compile </button>
-					<textarea readOnly={true} value={task.checker.compilationMessage}/> 
+					<AceEditor className = "editor" mode = "c_cpp" theme = "cobalt" width = "800px" onChange = {newCode => setTask({...task, checker: {code: newCode, isCompiled: false, compilationMessage: ""}}) } value = {task.checker.code} />
+					<div className = "duo">
+					<button className = "compile-button" onClick = {() => requestCompilation()}> Compile </button>
+					<textarea className = "checker-msg" readOnly={true} value={task.checker.compilationMessage}/> 
+					</div>
 				</>
 				}	
 			</div>
-			<div>
-				<div>Correct solution</div>	
+			<div className = "entry">
+				<h3> Correct solution</h3>	
 				Select language: 
-				<select onChange = {e => { setTask({...task, solution: {...task.solution, language: e.target.value}}) }}>
+				<select className = "lang-picker" onChange = {e => { setTask({...task, solution: {...task.solution, language: e.target.value}}) }}>
 					<option value = "c_cpp"> C++ </option>
 					<option value = "haskell"> Haskell </option>
 					<option value = "python"> Python </option>
 				</select>
-				<AceEditor mode = {task.solution.language} theme = "cobalt" width = "600px" onChange = {newCode => setTask({...task, solution: {...task.solution, code: newCode}}) } value = {task.solution.code} />
+				<AceEditor className = "editor" mode = {task.solution.language} theme = "cobalt" width = "800px" onChange = {newCode => setTask({...task, solution: {...task.solution, code: newCode}}) } value = {task.solution.code} />
 			</div>
 			<div>
-				<div>Testcases</div>
+				<h3>Testcases</h3>
 				{task.testcases.map((testcase: any, index: number) => (
-					<div key = {index}> 
+					<div className = "testcase" key = {index}> 
 						{`Testcase #${index + 1}`}
-						<button onClick = {() => changeTestcase('hidden', !testcase.hidden, index)}> {testcase.hidden ? 'Show' : 'Hide'} </button>
+						<button className = "btn show" onClick = {() => changeTestcase('hidden', !testcase.hidden, index)}> {testcase.hidden ? 'Show' : 'Hide'} </button>
 						{!testcase.hidden &&
-						<>
-							<div>
+						<div>
+							<div className = "row duo">
 								Input
-								<textarea onChange = {e => changeTestcase('input', e.target.value, index)} value = {testcase.input}/>
+								<textarea className = "in-box" onChange = {e => changeTestcase('input', e.target.value, index)} value = {testcase.input}/>
 							</div>
 
-							<div>
+							<div className = "row duo">
 								Output	
-								<textarea onChange = {e => changeTestcase('output', e.target.value, index)} value = {testcase.output}/>
-								<button onClick = {() => generateOutput(index)}> Generate output </button>
+								<textarea className = "out-box" onChange = {e => changeTestcase('output', e.target.value, index)} value = {testcase.output}/>
+								<button className = "out-btn" onClick = {() => generateOutput(index)}> Generate output </button>
 							</div>
 							
 							{testcase.sample && 
-							<div>
+							<div className = "row duo">
 								Note	
-								<textarea onChange = {e => changeTestcase('note', e.target.value, index)} value = {testcase.note}/>
+								<textarea className = "note-box" onChange = {e => changeTestcase('note', e.target.value, index)} value = {testcase.note}/>
 							</div>}
 
-							<div>
+							<div className = "row">
 								Sample	
 								<input type = "checkbox" onChange = {() => changeTestcase('sample', !testcase.sample, index)} checked = {testcase.sample} />
 							</div>
-						</>
+						</div>
 						}
 					</div>
 				))}
-				<button onClick = {() => setTask({...task, testcases: [...task.testcases, emptyTestcase]})}> Add testcase </button>
+				<button className = "add-btn" onClick = {() => setTask({...task, testcases: [...task.testcases, emptyTestcase]})}> Add testcase </button>
 			</div>
-			<button onClick = {() => saveTask()}> Save task </button>	
+			<button className = "save-btn" onClick = {() => saveTask()}> Save task </button>	
 		</div>
 	);	
 };

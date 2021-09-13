@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 	// read second line from output stream
 	stream = _read_line(_uout);
 	
-	// there should be exactly [user_len] int's in this line
+	// there should be exactly [user_len] ints in this line
 	std::vector <int> path;
 	for (int i = 0; i < user_len; i++) 
 		path.push_back(_get_int(stream));
