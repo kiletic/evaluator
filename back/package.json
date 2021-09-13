@@ -17,6 +17,7 @@
     "express-session": "^1.17.2",
     "mongoose": "^6.0.0",
     "mongoose-sequence": "^5.3.1",
+    "mpath": "^0.8.4",
     "nodemon": "^2.0.12",
     "pidusage": "^2.0.21",
     "queue-fifo": "^0.2.6"
