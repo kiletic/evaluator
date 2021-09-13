@@ -24,6 +24,7 @@ local/
 .App.tsx.swp
 *.out
 *.in
+db.ts 
 
 npm-debug.log*
 yarn-debug.log*
